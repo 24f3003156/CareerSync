@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from datetime import datetime,UTC
 
 db = SQLAlchemy()
 
@@ -21,8 +21,27 @@ class Company(db.Model):
     description = db.Column(db.text, nullable = False)
     approval_status = db.Column(db.string(50), default = "Pending")
     is_active = db.Column(db.boolean, default = True)
-    created_at = db.Column(db.datetime, default = datetime.utcnow)
+    created_at = db.Column(db.datetime, default = datetime.now(UTC))
     type_of_employment = db.Column(db.string(100))
+
+class student(db.Model):
+    id = db.Column(db.integer, primary_key = True)
+    full_name = db.Column(db.string(100), nullable = False)
+    email = db.Column(db.string, nullable = False, unique = True)
+    pass_hash = db.Column(db.string(100), nullable = False )
+    phone_number = db.Column(db.integer, nullable = False)
+    degree = db.Column(db.string(100), nullable = False)
+    branch = db.Column(db.string(100), nullable = False)
+    cgpa = db.Column(db.float, nullable = False)
+    skills = db.Column(db.string(100), nullable = False)
+    resume_filename = db.Column(db.string(100), nullable = False)
+    is_active = db.Column(db.boolean, default = True)
+    internship_experience = db.Column(db.string(100))
+    co-curricular_achievements = db.Column(db.string(100))
+
+
+
+
 
 
 
