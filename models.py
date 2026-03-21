@@ -24,7 +24,7 @@ class Company(db.Model):
     created_at = db.Column(db.datetime, default = datetime.now(UTC))
     type_of_employment = db.Column(db.string(100))
 
-class student(db.Model):
+class Student(db.Model):
     id = db.Column(db.integer, primary_key = True)
     full_name = db.Column(db.string(100), nullable = False)
     email = db.Column(db.string, nullable = False, unique = True)
@@ -38,6 +38,45 @@ class student(db.Model):
     is_active = db.Column(db.boolean, default = True)
     internship_experience = db.Column(db.string(100))
     co-curricular_achievements = db.Column(db.string(100))
+
+class PlacementDrive(db.Model):
+    id = db.Column(db.integer, primary_key = True)
+    company_id = db.Column(db.integer, db.ForeignKey('Company.id'), nullable=False)
+    job_title = db.Column(db.string(100), nullable = False)
+    job_description = db.Column(db.text, nullable = False)
+    skills_required = db.Column(db.string(100), nullable = False)
+    package_range = db.Column(db.string(100))
+    location = db.Column(db.string(100), nullable = False)
+    application_deadline = db.Column(db.datetime, nullable = False)
+    status = db.Column(db.string(50), default = "Pending")
+    created_at = db.Column(db.datetime, default = datetime.now(UTC))
+
+class Application(db.Model):
+    id = db.Column(db.integer, primary_key = True)
+    student_id = db.Column(db.integer, db.ForeignKey('Student.id'), nullable = False)
+    drive_id = db.Column(db.integer, db.ForeignKey('PlacementDrive.id'), nullable = False)
+    application_date = db.Column(db.datetime, default = datetime.now(UTC))
+    status = db.Column(db.string(50), default = "Applied ")
+    remarks = db.Column(db.string(100))
+
+class Placement(db.Model):
+    id = db.Column(db.integer, primary_key = True)
+    student_id = db.Column(db.integer, db.ForeignKey('Student.id'), nullable = False)
+    drive_id = db.Column(db.integer, db.ForeignKey('PlacementDrive.id'), nullable = False)
+    company_id = db.Column(db.integer, db.ForeignKey('Company.id'), nullable=False)
+    placed_on = db.Column(db.datetime, default = datetime.now(UTC))
+    final_status = db.Column(db.string(50), default = "Pending")
+    top_50_packages = db.Column(db.integer, nullable = False)
+ 
+
+
+
+
+    
+
+
+
+
 
 
 
