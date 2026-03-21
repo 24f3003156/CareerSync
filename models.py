@@ -8,8 +8,7 @@ class Admin(db.Model):
     username = db.Column(db.String(100), unique = True, nullable = False )
     pass_hash = db.Column(db.String(100), nullable = False )
     f_name = db.Column(db.String(100), nullable = False)
-    l_name = db.Column(db.String(100))
-    drives = db.relationship('PlacementDrive', backref = 'company', lazy = True)
+    l_name = db.Column(db.String(100))    
 
 class Company(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -24,6 +23,7 @@ class Company(db.Model):
     is_active = db.Column(db.Boolean, default = True)
     created_at = db.Column(db.DateTime, default = datetime.now(UTC))
     type_of_employment = db.Column(db.String(100))
+    drives = db.relationship('PlacementDrive', backref = 'company', lazy = True)
 
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -40,7 +40,7 @@ class Student(db.Model):
     internship_experience = db.Column(db.String(100))
     co_curricular_achievements = db.Column(db.String(100))
     created_at = db.Column(db.DateTime, default = datetime.now(UTC))
-    applications = db.relationship('Application', backref = 'Student', lazy = True)
+    applications = db.relationship('Application', backref = 'student', lazy = True)
     placements = db.relationship('Placement', backref = 'student', lazy = True)
 
 class PlacementDrive(db.Model):
@@ -63,7 +63,7 @@ class Application(db.Model):
     application_date = db.Column(db.DateTime, default = datetime.now(UTC))
     status = db.Column(db.String(50), default = "Applied")
     remarks = db.Column(db.String(100))
-    table_args = (db.UniqueConstraint('student_id', 'drive_id', name = 'unique_application'),)
+    __table_args__ = (db.UniqueConstraint('student_id', 'drive_id', name = 'unique_application'),)
 
 class Placement(db.Model):
     id = db.Column(db.Integer, primary_key = True)
