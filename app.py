@@ -79,7 +79,23 @@ def register_company():
             flash("Company already registered.")
             return redirect(url_for("register_company"))
         
-        
+        new_company = Company(
+            company_name = company_name,
+            email = email,
+            pass_hash = generate_password_hash(password),
+            hr_contact = hr_contact,
+            website = website,
+            domain = domain,
+            description = description,
+            type_of_employment = type_of_employment
+        )
+
+        db.session.add(new_company)
+        db.session.commit()
+        flash("Company registration was successfully submitted.")
+        return redirect(url_for("login"))
+    
+
 
 
 
