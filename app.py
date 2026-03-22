@@ -22,7 +22,6 @@ def login():
 
         if role == "admin":
             admin = Admin.query.filter_by(username = email_or_username).first()
-
             if admin and check_password_hash(admin.pass_hash, password):
                 session["user_id"] = admin.id
                 session["role"] = "admin"
@@ -30,6 +29,38 @@ def login():
                 return(redirect(url_for("index")))
             else:
                 flash("Invalid admin credentials.")
+
+        elif role == "company":
+            company = Company.query.filter_by(email = email_or_username).first()
+            if company and check_password_hash(company.pass_hash, password):
+                session["user_id"] = company.id
+                session["role"] = "company"
+                flash("Company login successfull.")
+                return redirect(url_for("index"))
+            else:
+                flash("Invalid company credentials.")
+
+        elif role == "student":
+            student = Student.query.filter_by(email = email_or_username).first()
+            if student and check_password_hash(student.pass_hash, password):
+                session["user_id"] = student.id
+                session["role"] = "student"
+                flash("Student login successfull.")
+                return redirect(url_for("index"))
+            else:
+                 flash("Invalid student credentials.")
+
+        else:
+            flash("Select a valid role.")
+
+    return render_template("login.html")
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug= True)
