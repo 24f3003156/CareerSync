@@ -55,6 +55,32 @@ def login():
 
     return render_template("login.html")
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    flash("Logged out successfully.")
+    return redirect(url_for("login"))
+
+@app.route("/register/company", methods = ["GET", "POST"])
+def register_company():
+    if request.method == "POST":
+        company_name = request.form.get("company_name")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        hr_contact = request.form.get("hr_contact")
+        website = request.form.get("hr_contact")
+        domain = request.form.get("website")
+        description = request.form.get("desciption")
+        type_of_employment = request.form.get("type_of_employment")
+
+        existing_company = Company.query.filter_by(email = email).first()
+
+        if existing_company:
+            flash("Company already registered.")
+            return redirect(url_for("register_company"))
+        
+        
+
 
 
 
