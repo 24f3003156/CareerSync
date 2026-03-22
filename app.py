@@ -95,13 +95,47 @@ def register_company():
         flash("Company registration was successfully submitted.")
         return redirect(url_for("login"))
     
+@app.route("/register/student", methods = ["GET", "POST"])
+def register_student():
+    if request.method == "POST":
+        full_name = request.form.get("full_name")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        phone_number = request.form.get("phone_number")
+        degree = request.form.get("degree")
+        branch = request.form.get("branch")
+        cgpa = request.form.get("cgpa")
+        skills = request.form.get("skills")
+        resume_filename = request.form.get("resume_filename")
+        internship_experience = request.form.get("internship_experience")
+        co_curricular_achievements = request.form.get("co_curricular_achievements")
 
+        existing_student = Student.query.filter_by(email = email).first()
 
+        if existing_student:
+            flash("Student already registered.")
+            return redirect(url_for("register_student"))
+        
+        new_student = Student(
+            full_name = full_name,
+            email = email,
+            pass_hash = generate_password_hash(password),
+            phone_number = phone_number,
+            degree = degree, 
+            branch = branch,
+            cgpa = cgpa,
+            skills = skills,
+            resume_filename = resume_filename,
+            internship_experience = internship_experience,
+            co_curricular_achievements = co_curricular_achievements
+        )
 
-
-
-
-
+        db.session.add(new_student)
+        db.session.commit()
+        flash("Student registered successfully.")
+        return redirect(url_for("login"))
+    
+    return render_template("register_student.html")
 
 
 if __name__ == "__main__":
