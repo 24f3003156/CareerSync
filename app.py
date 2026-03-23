@@ -94,6 +94,7 @@ def register_company():
         db.session.commit()
         flash("Company registration was successfully submitted.")
         return redirect(url_for("login"))
+    return render_template("register_company.html")
     
 @app.route("/register/student", methods = ["GET", "POST"])
 def register_student():
