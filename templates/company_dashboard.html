@@ -1,2 +1,22 @@
-<h1>Company Dashboard</h1>
-<a href="{{ url_for('logout')}}">Logout</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Dashboard</title>
+</head>
+<body>
+    <h1>Company Dashboard</h1>
+    <p>Welcome Company</p>
+    <a href="{{ url_for('logout')}}">Logout</a>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+   
+</body>
+</html>
