@@ -36,7 +36,7 @@ def login():
                 session["user_id"] = admin.id
                 session["role"] = "admin"
                 flash("Admin login successful.")
-                return(redirect(url_for("admin_dashboard")))
+                return redirect(url_for("admin_dashboard"))
             else:
                 flash("Invalid admin credentials.")
 
@@ -54,7 +54,7 @@ def login():
                 
                 session["user_id"] = company.id
                 session["role"] = "company"
-                flash("Company login successfull.")
+                flash("Company login successful.")
                 return redirect(url_for("company_dashboard"))
             else:
                 flash("Invalid company credentials.")
@@ -67,7 +67,7 @@ def login():
                     return redirect(url_for("login"))
                 session["user_id"] = student.id
                 session["role"] = "student"
-                flash("Student login successfull.")
+                flash("Student login successful.")
                 return redirect(url_for("student_dashboard"))
             else:
                  flash("Invalid student credentials.")
@@ -90,9 +90,9 @@ def register_company():
         email = request.form.get("email")
         password = request.form.get("password")
         hr_contact = request.form.get("hr_contact")
-        website = request.form.get("hr_contact")
-        domain = request.form.get("website")
-        description = request.form.get("desciption")
+        website = request.form.get("website")
+        domain = request.form.get("domain")
+        description = request.form.get("description")
         type_of_employment = request.form.get("type_of_employment")
 
         existing_company = Company.query.filter_by(email = email).first()
@@ -185,10 +185,6 @@ def student_dashboard():
 if __name__ == "__main__":
     app.run(debug= True)
 
-def admin_logged_in():
-    return "user_id" in session and session.get("role") == "admin"
 
-def student_logged_in():
-    return "user_id" in session and session.get("role") == "student"
 
     
