@@ -117,7 +117,7 @@ def register_company():
         flash("Company registration was successfully submitted.")
         return redirect(url_for("login"))
     return render_template("register_company.html")
-    
+   
 @app.route("/register/student", methods = ["GET", "POST"])
 def register_student():
     if request.method == "POST":
@@ -179,7 +179,7 @@ def admin_companies():
     companies = Company.query.all()
     return render_template("admin_companies.html", companies =companies)
 
-@app.route("/admin/company/<int:company_id/approve")
+@app.route("/admin/company/<int:company_id>/approve")
 def approve_company(company_id):
     if not admin_logged_in():
         flash("Unauthorized access.")
@@ -191,8 +191,8 @@ def approve_company(company_id):
     flash("Company approved successfully.")
     return redirect(url_for("admin_companies"))
 
-@app.route("/admin/company/<int:company_id/reject")
-def approve_company(company_id):
+@app.route("/admin/company/<int:company_id>/reject")
+def reject_company(company_id):
     if not admin_logged_in():
         flash("Unauthorized access.")
         return redirect(url_for("login"))
@@ -202,8 +202,8 @@ def approve_company(company_id):
     flash("Company rejected successfully.")
     return redirect(url_for("admin_companies"))
 
-@app.route("/admin/company/<int:company_id/blacklist")
-def approve_company(company_id):
+@app.route("/admin/company/<int:company_id>/blacklist")
+def blacklist_company(company_id):
     if not admin_logged_in():
         flash("Unauthorized access.")
         return redirect(url_for("login"))
@@ -213,6 +213,36 @@ def approve_company(company_id):
     db.session.commit()
     flash("Company blacklisted successfully.")
     return redirect(url_for("admin_companies"))
+
+@app.route("/admin/drives")
+def admin_drives():
+    if not admin_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    drives = PlacementDrive.query.all()
+    return render_template("admin_drives.html", drives = drives)
+
+@app.route("/admin/drive/<int:drive_id>/approve")
+def approve_drive(drive_id):
+    if not admin_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    drive = PlacementDrive.query.get_or_404(drive_id)
+    drive.status = "Approved"
+    db.session.commit()
+    flash("Placement drive approved successfully.")
+    return redirect(url_for("admin_drives"))
+
+@app.route("/admin/drive/<int:drive_id>/reject")
+def reject_drive(drive_id):
+    if not admin_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    drive = PlacementDrive.query.get_or_404(drive_id)
+    drive.status = "Rejected"
+    db.session.commit()
+    flash("Placement drive rejected successfully.")
+    return redirect(url_for("admin_drives"))    
 
 @app.route("/company/dashboard")
 def company_dashboard():
