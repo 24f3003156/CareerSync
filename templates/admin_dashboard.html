@@ -7,7 +7,12 @@
 </head>
 <body>
     <h1>Admin Dashboard</h1>
-    <p>Welcome Admin</p>
+    
+    <p>Total Companies: {{ total_companies }}</p>
+    <p>Total Students: {{ total_students }}</p>
+    <p>Total Placement  Drives: {{ total_drives }}</p>
+    <p>Total Applications: {{ total_applications }}</p>
+
     <a href="{{ url_for('logout')}}">Logout</a>
 
     {% with messages = get_flashed_messages() %}
