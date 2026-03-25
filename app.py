@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session 
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, Admin, Company, Student, PlacementDrive, Application
 
@@ -249,7 +249,16 @@ def admin_students():
     if not admin_logged_in():
         flash("Unauthorized access.")
         return redirect(url_for("login"))
-    students = Student.query.all()
+    search_query = request.args.get("search")
+    if search_query:
+        students = Student.query.filter(
+            (Student.full_name.ilike(f"%{search_query}%")) |
+            (Student.email_name.ilike(f"%{search_query}%")) |
+            (Student.phone_number.ilike(f"%{search_query}%")) |
+            (Student.id == search_query)
+        ).all
+    else:
+        students = Student.query.all()
     return render_template("admin_students.html", students = students)
 
 @app.route("/admin/student/<int:student_id>/deactivate")

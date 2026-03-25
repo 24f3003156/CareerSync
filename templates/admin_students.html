@@ -19,6 +19,13 @@
         {% endif %}
     {% endwith %}
 
+    <form method="GET" action="{{ url_for('admin_students') }}">
+        <input type="text" name="search" placeholder="Search by name, email, phone or ID">
+        <button type="submit">Search</button>
+    </form>
+
+    <br>
+
     <table border="1" cellpadding="8">
         <tr>
             <th>ID</th>
