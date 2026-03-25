@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Companies</title>
+</head>
+<body>
+    <h1>Manage Companies</h1>
+
+    <p><a href="{{ url_for('admin_dashboard') }}">Back to Admin Dashboard</a></p>
+    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>ID</th>
+            <th>Company Name</th>
+            <th>Email</th>
+            <th>Domain</th>
+            <th>Approval Status</th>
+            <th>Active Status</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for company in companies %}
+        <tr>
+            <td>{{ company.id }}</td>
+            <td>{{ company.company_name }}</td>
+            <td>{{ company.email }}</td>
+            <td>{{ company.domain }}</td>
+            <td>{{ company.approval_status }}</td>
+            <td>{{ company.is_active }}</td>
+            <td>
+                <a href="{{ url_for('approve_company', company_id = company.id)}}">Approve</a>
+                <a href="{{ url_for('reject_company', company_id = company.id)}}">Reject</a>
+                <a href="{{ url_for('blacklist_company', company_id = company.id)}}">Blacklist</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

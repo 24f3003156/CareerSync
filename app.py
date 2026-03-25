@@ -171,6 +171,49 @@ def admin_dashboard():
     total_applications = Application.query.count()
     return render_template("admin_dashboard.html", total_companies = total_companies, total_students = total_students, total_drives = total_drives, total_applications = total_applications)
 
+@app.route("/admin/companies")
+def admin_companies():
+    if not admin_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    companies = Company.query.all()
+    return render_template("admin_companies.html", companies =companies)
+
+@app.route("/admin/company/<int:company_id/approve")
+def approve_company(company_id):
+    if not admin_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    company = Company.query.get_or_404(company_id)
+    company.approval_status = "Approved"
+    company.is_active = True
+    db.session.commit()
+    flash("Company approved successfully.")
+    return redirect(url_for("admin_companies"))
+
+@app.route("/admin/company/<int:company_id/reject")
+def approve_company(company_id):
+    if not admin_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    company = Company.query.get_or_404(company_id)
+    company.approval_status = "Rejected"    
+    db.session.commit()
+    flash("Company rejected successfully.")
+    return redirect(url_for("admin_companies"))
+
+@app.route("/admin/company/<int:company_id/blacklist")
+def approve_company(company_id):
+    if not admin_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    company = Company.query.get_or_404(company_id)
+    company.approval_status = "Blacklisted"
+    company.is_active = False
+    db.session.commit()
+    flash("Company blacklisted successfully.")
+    return redirect(url_for("admin_companies"))
+
 @app.route("/company/dashboard")
 def company_dashboard():
     if not company_logged_in():
