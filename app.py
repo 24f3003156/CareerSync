@@ -242,7 +242,26 @@ def reject_drive(drive_id):
     drive.status = "Rejected"
     db.session.commit()
     flash("Placement drive rejected successfully.")
-    return redirect(url_for("admin_drives"))    
+    return redirect(url_for("admin_drives"))   
+
+@app.route("/admin/students") 
+def admin_students():
+    if not admin_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    students = Student.query.all()
+    return render_template("admin_students.html", students = students)
+
+@app.route("/admin/student/<int:student_id>/deactivate")
+def deactivate_student(student_id):
+    if not admin_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    student = Student.query.get_or_404(student_id)
+    student.is_active = False
+    db.session.commit()
+    flash("Student deactivated successfully.")
+    return redirect(url_for("admin_students"))
 
 @app.route("/company/dashboard")
 def company_dashboard():

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Students</title>
+</head>
+<body>
+    <h1>Manage Students</h1>
+
+    <p><a href="{{ url_for('admin_dashboard') }}">Back to Admin Dashboard</a></p>
+    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Degree</th>
+            <th>Branch</th>
+            <th>CGPA</th>
+            <th>Skills</th>
+            <th>Active Status</th>
+            <th>Action</th>
+        </tr>
+
+        {% for drive in drives %}
+        <tr>
+            <td>{{ student.id }}</td>
+            <td>{{ student.full_name }}</td>
+            <td>{{ student.email }}</td>
+            <td>{{ student.phone_number }}</td>
+            <td>{{ student.degree }}</td>
+            <td>{{ student.branch }}</td>
+            <td>{{ student.cgpa }}</td>
+            <td>{{ student.skills }}</td>
+            <td>{{ student.is_active }}</td>
+            <td>
+                <a href="{{ url_for('deactivate_student', student_id = student.id)}}">Deactivate</a>
+        </tr>
+        {% endfor %}
+    </table>    
+</body>
+</html>
