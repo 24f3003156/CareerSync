@@ -5,7 +5,7 @@ from models import db, Admin, Company, Student, PlacementDrive, Application
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///placement_portal.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SECRET_KEY"] = "secret_key"
+app.config["SECRET_KEY"] = "career_sync_secret"
 
 db.init_app(app)
 
@@ -176,7 +176,15 @@ def admin_companies():
     if not admin_logged_in():
         flash("Unauthorized access.")
         return redirect(url_for("login"))
-    companies = Company.query.all()
+    search_query = request.args.get("search")
+    if search_query:
+        companies = Company.query.filter(
+            (Company.company_name.ilike(f"%{search_query}%"))|
+            (Company.email.ilike(f"%{search_query}%"))|
+            (Company.domain.ilike(f"%{search_query}%"))
+        ).all()
+    else:
+        companies = Company.query.all()
     return render_template("admin_companies.html", companies =companies)
 
 @app.route("/admin/company/<int:company_id>/approve")
@@ -251,15 +259,18 @@ def admin_students():
         return redirect(url_for("login"))
     search_query = request.args.get("search")
     if search_query:
-        students = Student.query.filter(
-            (Student.full_name.ilike(f"%{search_query}%")) |
-            (Student.email_name.ilike(f"%{search_query}%")) |
-            (Student.phone_number.ilike(f"%{search_query}%")) |
-            (Student.id == search_query)
-        ).all
-    else:
-        students = Student.query.all()
-    return render_template("admin_students.html", students = students)
+        if search_query.isdigit():
+            students = Student.query.filter(
+                (Student.full_name.ilike(f"%{search_query}%")) |
+                (Student.email.ilike(f"%{search_query}%")) |
+                (Student.id == search_query)
+                ).all()
+        else:
+            students = Student.query.filter(
+                (Student.full_name.ilike(f"%{search_query}%")) |
+                (Student.email.ilike(f"%{search_query}%"))
+            ).all()
+        return render_template("admin_students.html", students = students)
 
 @app.route("/admin/student/<int:student_id>/deactivate")
 def deactivate_student(student_id):

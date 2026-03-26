@@ -40,7 +40,7 @@
             <th>Action</th>
         </tr>
 
-        {% for drive in drives %}
+        {% for student in students %}
         <tr>
             <td>{{ student.id }}</td>
             <td>{{ student.full_name }}</td>
@@ -53,6 +53,7 @@
             <td>{{ student.is_active }}</td>
             <td>
                 <a href="{{ url_for('deactivate_student', student_id = student.id)}}">Deactivate</a>
+            </td>
         </tr>
         {% endfor %}
     </table>    
