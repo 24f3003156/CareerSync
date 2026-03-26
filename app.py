@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session 
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import db, Admin, Company, Student, PlacementDrive, Application
+from models import db, Admin, Company, Student, PlacementDrive, Application, Placement
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///placement_portal.db"
@@ -159,6 +159,22 @@ def register_student():
         return redirect(url_for("login"))
     
     return render_template("register_student.html")
+
+@app.route("/admin/applications")
+def admin_applications():
+    if not admin_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    applications = Application.query.all()
+    return render_template("admin_applications.html", applications = applications)
+
+@app.route("/admin/placements")
+def admin_placements():
+    if not admin_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    placements = Placement.query.all()
+    return render_template("admin_placements.html", placements = placements)
 
 @app.route("/admin/dashboard")
 def admin_dashboard():
