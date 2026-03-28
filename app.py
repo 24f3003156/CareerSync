@@ -407,6 +407,47 @@ def close_drive(drive_id):
     flash("Placement drive closed successfully.")
     return redirect(url_for("company_drives"))
 
+@app.route("/company/drive/<int:drive_id>/applications")
+def company_drive_applications(drive_id):
+    if not company_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    drive = PlacementDrive.query.get_or_404(drive_id)
+    if drive.company_id != session["user_id"]:
+        flash("You are not allowed to view applications for this drive.")
+        return redirect(url_for("company_drives"))
+    applications = Application.query.filter_by(drive_id = drive_id).all()
+    return render_template(
+        "company_drive_applications.html",
+        drive = drive,
+        applications = applications
+    )
+
+@app.route("/company/application/<int:application_id>/status", methods = ["GET", "POST"])
+def update_application_status(application_id):
+    if not company_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    
+    application = Application.query.get_or_404(application_id)
+    drive = PlacementDrive.query.get_or_404(application.drive_id)
+
+    if drive.company_id != session["user_id"]:
+        flash("You are not allowed to edit this application.")
+        return redirect(url_for("company_drives"))
+    
+    if request.method == "POST":
+        new_status = request.form.get("status")
+        application.status = new_status
+        db.session.commit()
+        flash("Application status updated successfully.")
+        return redirect(url_for("company_drive_applications", drive_id = drive.id))
+    return render_template(
+        "update_application_status.html",
+        application = application,
+        drive = drive
+    )    
+
 @app.route("/student/dashboard")
 def student_dashboard():
     if not student_logged_in():

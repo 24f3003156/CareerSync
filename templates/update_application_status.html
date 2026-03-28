@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Application Status</title>
+</head>
+<body>
+    <h1>Update Application Status</h1>
+
+    <p>Drive ID: {{ drive.id }}</p>
+    <p>Student ID: {{ application.student_id }}</p>
+    <p>Current Status: {{ application.status }}</p>
+
+    <p><a href="{{ url_for('company_drive_applications', drive_id = drive.id) }}">Back to Applications</a></p>
+    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <label>Select New Status</label>
+        <select name="status" required>
+            <option value="">Select Status</option>
+            <option value="Shortlisted">Shortlisted</option>
+            <option value="Selectd">Selected</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Interview">Interview</option>
+            <option value="Placed">Placed</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">Update Status</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drive Applications</title>
+</head>
+<body>
+    <h1>Applications for {{ drive.job_title }}</h1>
+
+    <p><a href="{{ url_for('company_drives') }}">Back to My Drives</a></p>
+    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Application ID</th>
+            <th>Student ID</th>
+            <th>Application Date</th>                        
+            <th>Status</th> 
+            <th>Remarks</th>
+            <th>Action</th>           
+        </tr>
+
+        {% for application in applications %}
+        <tr>
+            <td>{{ application.id }}</td>
+            <td>{{ application.student_id }}</td>
+            <td>{{ application.application_date }}</td>
+            <td>{{ application.status }}</td>
+            <td>{{ application.remarks }}</td>
+            <td>
+                <a href="{{ url_for('update_application_status', application_id = application.id) }}">Update Status</a>                
+            </td>         
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
