@@ -7,8 +7,15 @@
 </head>
 <body>
     <h1>Company Dashboard</h1>
-    <p>Welcome Company</p>
-    <a href="{{ url_for('logout')}}">Logout</a>
+
+    <p>Company Name: {{ company.company_name }}</p>
+    <p>Email: {{ company.email }}</p>
+    <p>Domain :{{ company.domain }}</p>
+    <p>Approval Status: {{ company.approval_status }}</p>
+
+    <p><a href="{{ url_for('company_drives') }}">View My Drives</a></p>
+    <p><a href="{{ url_for('create_drives') }}">Create Placement Drive</a></p>
+    <p><a href="{{ url_for('logout')}}">Logout</a></p>
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}

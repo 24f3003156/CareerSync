@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Placement Drive</title>
+</head>
+<body>
+    <h1>Create Placement Drive</h1>
+
+    <p><a href="{{ url_for('company_dashboard') }}">Back to Company Dashboard</a></p>
+    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+
+    {% with messages = get_flashed_mesages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <label>Job Title</label>
+        <input type="text" name="job_title" required>
+        <br><br>
+
+        <label>Job Desciption</label>
+        <textarea name="job_desciption" reuired></textarea>
+        <br><br>
+
+        <label>Eligibilty Criteria</label>
+        <input type="text" name="eligibility_criteria" required>
+
+        <label>Skills Required</label>
+        <input type="text" name="skills_required" required>
+        <br><br>
+
+        <label>Package Range</label>
+        <input type="text" name="package_range">
+        <br><br>
+
+        <label>Location</label>
+        <input type="text" name="location" required>
+        <br><br>
+
+        <label>Application Deadline</label>
+        <input type="datetime-local" name="application_deadline" required>
+        <br><br>
+
+        <button type="submit">Create Drive</button>
+    </form>
+    
+</body>
+</html>

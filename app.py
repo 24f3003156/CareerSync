@@ -304,7 +304,49 @@ def company_dashboard():
     if not company_logged_in():
         flash("Unauthorized access.")
         return redirect(url_for("login"))
-    return render_template("company_dashboard.html")
+    company = Company.query.get_or_404(session["user_id"])
+    drives = PlacementDrive.query.filter_by(company_id = company.id).all()
+    return render_template("company_dashboard.html", company = company, drives = drives)
+
+@app.route("/company/drives")
+def company_drives():
+    if not company_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for('login'))
+    company_id = session["user_id"]
+    drives = PlacementDrive.query.filter_by(company_id = company_id).all()
+    return render_template("company_drives.html", drives = drives)
+
+@app.route("/company/drive/create", methods = ["GET", "POST"])
+def create_drive():
+    if not company_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    if request.method == "POST":
+        job_title = request.form.get("job.title")
+        job_desciption = request.form.get("job_description")
+        eligibililty_criteria = request.form.get("eligibility_criteria")
+        skills_required = request.form.get("skills_required")
+        package_range = request.form.get("skills_required")
+        location = request.form.get("package_range")
+        application_deadline = request.form.get("application_deadline")
+
+        new_drive = PlacementDrive(
+            company_id = session["user_id"]
+            job_title = job_title,
+            job_desciption = job_desciption,
+            eligibililty_criteria = eligibililty_criteria,
+            skills_required = skills_required,
+            package_range = package_range,
+            location = location,
+            application_deadline = application_deadline,
+            status = "Pending"
+        )
+        db.session.add(new_drive)
+        db.sesssion.commit()
+        flash("Placement drive created successfully and sent for admin approval.")
+        return redirect(url_for("company_drives"))
+    return render_template("create_drive.html")    
 
 @app.route("/student/dashboard")
 def student_dashboard():
