@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session 
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, Admin, Company, Student, PlacementDrive, Application, Placement
 
@@ -89,7 +90,7 @@ def register_company():
         company_name = request.form.get("company_name")
         email = request.form.get("email")
         password = request.form.get("password")
-        hr_contact = request.form.get("hr_contact")
+        hr_contact = int(request.form.get("hr_contact"))
         website = request.form.get("website")
         domain = request.form.get("domain")
         description = request.form.get("description")
@@ -124,10 +125,10 @@ def register_student():
         full_name = request.form.get("full_name")
         email = request.form.get("email")
         password = request.form.get("password")
-        phone_number = request.form.get("phone_number")
+        phone_number = int(request.form.get("phone_number"))
         degree = request.form.get("degree")
         branch = request.form.get("branch")
-        cgpa = request.form.get("cgpa")
+        cgpa = float(request.form.get("cgpa"))
         skills = request.form.get("skills")
         resume_filename = request.form.get("resume_filename")
         internship_experience = request.form.get("internship_experience")
@@ -279,14 +280,16 @@ def admin_students():
             students = Student.query.filter(
                 (Student.full_name.ilike(f"%{search_query}%")) |
                 (Student.email.ilike(f"%{search_query}%")) |
-                (Student.id == search_query)
+                (Student.id == int(search_query))
                 ).all()
         else:
             students = Student.query.filter(
                 (Student.full_name.ilike(f"%{search_query}%")) |
                 (Student.email.ilike(f"%{search_query}%"))
             ).all()
-        return render_template("admin_students.html", students = students)
+    else:
+        students = Student.query.all()
+    return render_template("admin_students.html", students = students)
 
 @app.route("/admin/student/<int:student_id>/deactivate")
 def deactivate_student(student_id):
@@ -323,19 +326,20 @@ def create_drive():
         flash("Unauthorized access.")
         return redirect(url_for("login"))
     if request.method == "POST":
-        job_title = request.form.get("job.title")
-        job_desciption = request.form.get("job_description")
-        eligibililty_criteria = request.form.get("eligibility_criteria")
+        job_title = request.form.get("job_title")
+        job_description = request.form.get("job_description")
+        eligibility_criteria = request.form.get("eligibility_criteria")
         skills_required = request.form.get("skills_required")
-        package_range = request.form.get("skills_required")
-        location = request.form.get("package_range")
-        application_deadline = request.form.get("application_deadline")
+        package_range = request.form.get("package_range")
+        location = request.form.get("location")
+        application_deadline_str = request.form.get("application_deadline")
+        application_deadline = datetime.strptime(application_deadline_str, "%Y-%m-%dT%H:%M")
 
         new_drive = PlacementDrive(
-            company_id = session["user_id"]
+            company_id = session["user_id"],
             job_title = job_title,
-            job_desciption = job_desciption,
-            eligibililty_criteria = eligibililty_criteria,
+            job_description = job_description,
+            eligibility_criteria = eligibility_criteria,
             skills_required = skills_required,
             package_range = package_range,
             location = location,
@@ -343,10 +347,65 @@ def create_drive():
             status = "Pending"
         )
         db.session.add(new_drive)
-        db.sesssion.commit()
+        db.session.commit()
         flash("Placement drive created successfully and sent for admin approval.")
         return redirect(url_for("company_drives"))
     return render_template("create_drive.html")    
+
+@app.route("/company/drive/<int:drive_id>/edit", methods = ["GET", "POST"])
+def edit_drive(drive_id):
+    if not company_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    drive = PlacementDrive.query.get_or_404(drive_id)
+    if drive.company_id != session["user_id"]:
+        flash("You are not allowed to edit this drive.")
+        return redirect(url_for("company_drives"))
+    if request.method =="POST":
+        drive.job_title = request.form.get("job.title")
+        drive.job_description = request.form.get("job_description")
+        drive.eligibility_criteria = request.form.get("eligibility_criteria")
+        drive.skills_required = request.form.get("skills_required")
+        drive.package_range = request.form.get("package_range")
+        drive.location = request.form.get("location")
+        application_deadline_str = request.form.get("application_deadline")
+        drive.application_deadline = datetime.strptime(application_deadline_str, "%Y-%m-%dT%H:%M")
+
+        drive.status = "Pending"
+        db.session.commit()
+        flash("Placement drive updated and sent again for admin approval.")
+        return redirect(url_for("company_drives"))
+    return render_template("edit_drive.html", drive = drive)
+
+@app.route("/company/drive/<int:drive_id>/delete")
+def delete_drive(drive_id):
+    if not company_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    drive = PlacementDrive.query.get_or_404(drive_id)
+    if drive.company_id != session["user_id"]:
+        flash("You are not allowed to delete this drive.")
+        return redirect(url_for("company_drives"))
+    
+    db.session.delete(drive)
+    db.session.commit()
+    flash("Placement drive deleted successfully.")
+    return redirect(url_for("company_drives"))
+
+@app.route("/company/drive/<int:drive_id>/close")
+def close_drive(drive_id):
+    if not company_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    drive = PlacementDrive.query.get_or_404(drive_id)
+    if drive.company_id != session["user_id"]:
+        flash("You are not allowed to close this drive.")
+        return redirect(url_for("company_drives"))
+    
+    drive.status = "Closed"
+    db.session.commit()
+    flash("Placement drive closed successfully.")
+    return redirect(url_for("company_drives"))
 
 @app.route("/student/dashboard")
 def student_dashboard():

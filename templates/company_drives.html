@@ -12,7 +12,7 @@
     <p><a href="{{ url_for('create_drive') }}">Create New Drive</a></p>
     <p><a href="{{ url_for('logout') }}">Logout</a></p>
 
-    {% with messages = get_flashed_mesages() %}
+    {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
                 <p>{{ message }}</p>
@@ -26,7 +26,8 @@
             <th>Job Title</th>
             <th>Location</th>
             <th>Application Deadline</th>            
-            <th>Status</th>            
+            <th>Status</th> 
+            <th>Actions</th>           
         </tr>
 
         {% for drive in drives %}
@@ -35,7 +36,12 @@
             <td>{{ drive.job_title }}</td>
             <td>{{ drive.location }}</td>
             <td>{{ drive.application_deadline }}</td>
-            <td>{{ drive.status }}</td>           
+            <td>{{ drive.status }}</td>
+            <td>
+                <a href="{{ url_for('edit_drive', drive_id = drive.id) }}">Edit</a>
+                <a href="{{ url_for('delete_drive', drive_id = drive.id) }}">Delete</a>
+                <a href="{{ url_for('close_drive', drive_id = drive.id) }}">Close</a>
+            </td>         
         </tr>
         {% endfor %}
     </table>  
