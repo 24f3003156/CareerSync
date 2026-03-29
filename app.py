@@ -507,7 +507,16 @@ def apply_drive(drive_id):
     flash("Application submitted successfully.")
     return redirect(url_for("student_applications"))
 
+@app.route("/student/applications")
+def student_applications():
+    if not student_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    
+    student_id = session["user_id"]
+    applications = Application.query.filter_by(student_id = student_id).all()
 
+    return render_template("student_applications.html", applications = applications)
 
 if __name__ == "__main__":
     app.run(debug= True)
