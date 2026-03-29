@@ -453,7 +453,12 @@ def student_dashboard():
     if not student_logged_in():
         flash("Unauthorized access.")
         return redirect(url_for("login"))
-    return render_template("student_dashboard.html")
+    student = Student.query.get_or_404(session["user_id"])
+    applications = Application.query.filter_by(student_id = student.id).all()    
+    return render_template(
+        "student_dashboard.html",
+        student = student,
+        applications = applications)
 
 
 if __name__ == "__main__":
