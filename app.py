@@ -460,6 +460,15 @@ def student_dashboard():
         student = student,
         applications = applications)
 
+@app.route("/student/drives")
+def student_drives():
+    if not student_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    drives = PlacementDrive.query.filter_by(status = "Approved").all()
+    return render_template("student_drives.html", drives = drives)
+
+
 
 if __name__ == "__main__":
     app.run(debug= True)

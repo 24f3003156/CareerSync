@@ -7,8 +7,16 @@
 </head>
 <body>
     <h1>Student Dashboard</h1>
-    <p>Welcome Student</p>
-    <a href="{{ url_for('logout')}}">Logout</a>
+    
+    <p>Full Name: {{ student.full_name }}</p>
+    <p>Email: {{ student.email }}</p>
+    <p>Degree: {{ student.degree }}</p>
+    <p>Branch: {{ student.branch }}</p>
+    <p>CGPA: {{ student.cgpa }}</p>
+
+    <p><a href="{{ url_for('student_drives') }}">View Approved Drives</a></p>
+    <p><a href="{{ url_for('student_applications') }}">My Applications</a></p>
+    <p><a href="{{ url_for('logout') }}">Logout</a></p>
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}

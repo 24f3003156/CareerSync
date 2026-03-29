@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approved Drives</title>
+</head>
+<body>
+    <h1>Approved Placement Drives</h1>
+
+    <p><a href="{{ url_for('student_dashboard') }}">Back to Student Dashboard</a></p>
+    <p><a href="{{ url_for('student_applications') }}">My Applications</a></p>
+    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>ID</th>
+            <th>Job Title</th>
+            <th>Location</th>
+            <th>Skills Required</th>
+            <th>Deadline</th>           
+            <th>Status</th> 
+            <th>Action</th>           
+        </tr>
+
+        {% for drive in drives %}
+        <tr>
+            <td>{{ drive.id }}</td>
+            <td>{{ drive.job_title }}</td>
+            <td>{{ drive.location }}</td>
+            <td>{{ drive.skills_required }}</td>
+            <td>{{ drive.application_deadline }}</td>
+            <td>{{ drive.status }}</td>
+            <td>
+                <a href="{{ url_for('apply_drive', drive_id = drive.id) }}">Apply</a>                
+            </td>         
+        </tr>
+        {% endfor %}
+    </table>  
+</body>
+</html>
