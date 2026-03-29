@@ -468,6 +468,45 @@ def student_drives():
     drives = PlacementDrive.query.filter_by(status = "Approved").all()
     return render_template("student_drives.html", drives = drives)
 
+@app.route("/student/drive/<int:drive_id>/apply")
+def apply_drive(drive_id):
+    if not student_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    
+    student_id = session["user_id"]
+    drive = PlacementDrive.query.get_or_404(drive_id)
+    company = Company.query.get_or_404(drive.company_id)
+
+    if drive.status != "Approved":
+        flash("You can apply to approved ones only.")
+        return redirect(url_for("student_drives"))
+    
+    if company.approval_status != "Approved" or company.is_active ==False:
+        flash("You cannot apply to this drive.")
+        return redirect(url_for("student_drives"))
+    
+    existing_application = Application.query.filter_by(
+        student_id = student_id,
+        drive_id = drive.id
+    ).first()
+
+    if existing_application:
+        flash("You have already applied for this drive.")
+        return redirect(url_for("student_drives"))
+    
+    new_application = Application(
+        student_id = student_id,
+        drive_id = drive.id,
+        status = "Applied"
+    )
+
+    db.session.add(new_application)
+    db.session.commit()
+
+    flash("Application submitted successfully.")
+    return redirect(url_for("student_applications"))
+
 
 
 if __name__ == "__main__":
