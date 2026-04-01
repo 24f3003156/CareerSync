@@ -302,6 +302,17 @@ def deactivate_student(student_id):
     flash("Student deactivated successfully.")
     return redirect(url_for("admin_students"))
 
+@app.route("/admin/student/<int:student_id>/activate")
+def activate_student(student_id):
+    if not admin_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    student = Student.query.get_or_404(student_id)
+    student.is_active = True
+    db.session.commit()
+    flash("Student activated successfully.")
+    return redirect(url_for("admin_students"))
+
 @app.route("/company/dashboard")
 def company_dashboard():
     if not company_logged_in():
@@ -465,7 +476,19 @@ def student_drives():
     if not student_logged_in():
         flash("Unauthorized access.")
         return redirect(url_for("login"))
-    drives = PlacementDrive.query.filter_by(status = "Approved").all()
+
+    search_query = request.args.get("search")
+    
+    if search_query:
+        drives = PlacementDrive.query.filter(
+           (PlacementDrive.status =="Approved")&
+        (
+            (PlacementDrive.job_title.ilike(f"%{search_query}%")) |
+            (PlacementDrive.skills_required.ilike(f"%{search_query}%")) |
+            (PlacementDrive.location.ilike(f"%{search_query}%"))
+        ).all()
+    else:
+    drives = PlacementDrive.query.filter_by(status = "Approved").all()        
     return render_template("student_drives.html", drives = drives)
 
 @app.route("/student/drive/<int:drive_id>/apply")
@@ -517,6 +540,17 @@ def student_applications():
     applications = Application.query.filter_by(student_id = student_id).all()
 
     return render_template("student_applications.html", applications = applications)
+
+@app.route("/student/history")
+def student_history():
+    if not student_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    
+    student_id = session["user_id"]
+    placements = Placement.query.filter_by(student_id = student_id).all()
+
+    return render_template("student_history.html", placements = placements)
 
 if __name__ == "__main__":
     app.run(debug= True)

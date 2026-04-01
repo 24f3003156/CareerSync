@@ -52,7 +52,11 @@
             <td>{{ student.skills }}</td>
             <td>{{ student.is_active }}</td>
             <td>
-                <a href="{{ url_for('deactivate_student', student_id = student.id)}}">Deactivate</a>
+                {% if student.is_active %}
+                    <a href="{{ url_for('deactivate_student', student_id = student.id) }}">Deactivate</a>
+                {% else %}
+                    <a href="{{ url_for('activate_student', student_id = student.id) }}">Activate</a>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}
