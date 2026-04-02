@@ -23,6 +23,7 @@
     <table border="1" cellpadding="8">
         <tr>
             <th>Application ID</th>
+            <th>Job Title</th>
             <th>Drive ID</th>
             <th>Application Date</th>                     
             <th>Status</th> 
@@ -32,6 +33,7 @@
         {% for application in appliactions %}
         <tr>
             <td>{{ application.id }}</td>
+            <td>{{ application.drive.job_title }}</td>
             <td>{{ application.drive_id }}</td>            >
             <td>{{ application.application_date }}</td>
             <td>{{ application.status }}</td>

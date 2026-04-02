@@ -373,7 +373,7 @@ def edit_drive(drive_id):
         flash("You are not allowed to edit this drive.")
         return redirect(url_for("company_drives"))
     if request.method =="POST":
-        drive.job_title = request.form.get("job.title")
+        drive.job_title = request.form.get("job_title")
         drive.job_description = request.form.get("job_description")
         drive.eligibility_criteria = request.form.get("eligibility_criteria")
         drive.skills_required = request.form.get("skills_required")
@@ -450,6 +450,22 @@ def update_application_status(application_id):
     if request.method == "POST":
         new_status = request.form.get("status")
         application.status = new_status
+
+        if new_status == "Placed":
+            existing_placement = Placement.query.filter_by(
+                student_id = application.student_id,
+                drive_id = application.drive_id
+            ).first()
+
+            if not existing_placement:
+                new_placement = Placement(
+                    student_id = application.student_id,
+                    drive_id = application.drive_id,
+                    company_id = drive.company_id,
+                    final_status = "Placed",
+                    top_50_packages = 0
+                )
+                db.session.add(new_placement)
         db.session.commit()
         flash("Application status updated successfully.")
         return redirect(url_for("company_drive_applications", drive_id = drive.id))
@@ -478,17 +494,24 @@ def student_drives():
         return redirect(url_for("login"))
 
     search_query = request.args.get("search")
+    current_time = datetime.now()
     
     if search_query:
         drives = PlacementDrive.query.filter(
            (PlacementDrive.status =="Approved")&
+           (PlacementDrive.application_deadline >= current_time) &
         (
-            (PlacementDrive.job_title.ilike(f"%{search_query}%")) |
-            (PlacementDrive.skills_required.ilike(f"%{search_query}%")) |
-            (PlacementDrive.location.ilike(f"%{search_query}%"))
-        ).all()
+            PlacementDrive.job_title.ilike(f"%{search_query}%") |
+            PlacementDrive.skills_required.ilike(f"%{search_query}%") |
+            PlacementDrive.location.ilike(f"%{search_query}%")
+        )
+    ).all()
     else:
-    drives = PlacementDrive.query.filter_by(status = "Approved").all()        
+        drives = PlacementDrive.query.filter(
+            (PlacementDrive.status =="Approved") &
+            (PlacementDrive.application_deadline >= current_time) 
+        ).all()     
+              
     return render_template("student_drives.html", drives = drives)
 
 @app.route("/student/drive/<int:drive_id>/apply")
@@ -498,6 +521,7 @@ def apply_drive(drive_id):
         return redirect(url_for("login"))
     
     student_id = session["user_id"]
+
     drive = PlacementDrive.query.get_or_404(drive_id)
     company = Company.query.get_or_404(drive.company_id)
 
@@ -523,13 +547,11 @@ def apply_drive(drive_id):
         drive_id = drive.id,
         status = "Applied"
     )
-
     db.session.add(new_application)
     db.session.commit()
-
     flash("Application submitted successfully.")
-    return redirect(url_for("student_applications"))
-
+    return redirect(url_for("student_drives"))
+    
 @app.route("/student/applications")
 def student_applications():
     if not student_logged_in():
