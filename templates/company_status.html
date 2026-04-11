@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Status</title>
+</head>
+<body>
+    <h1> Company Current Status</h1>
+
+    <p> <a href="{{ url_for('company_dashboard')}}">Back to Company Dashboard</a></p>
+    <p> <a href="{{ url_for('logout')}}">Logout</a></p>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <h2>Company Details</h2>
+    <p>Company Name : {{ company.company_name }}</p>
+    <p>Email : {{ company.email }}</p>
+    <p>Approval Status : {{ company.approval_status }}</p>
+    <p>Active Status : {{ company.is_active }}</p>
+
+    <h2>Drive Status</h2>
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Drive ID</th>
+            <th>Job Title</th>
+            <th>Location</th>
+            <th>Application Deadline</th>
+            <th>Status</th>
+        </tr>
+
+        {% for drive in drives %}
+        <tr>
+            <td>{{ drive.id }}</td>
+            <td>{{ drive.job_title }}</td>
+            <td>{{ drive.location }}</td>
+            <td>{{ drive.application_deadline }}</td>
+            <td>{{ drive.status }}</td>            
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

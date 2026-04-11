@@ -232,6 +232,13 @@ def admin_change_password():
         if new_password != confirm_password:
             flash("New password and confirm password do not match.")
             return redirect(url_for("admin_change_password"))
+        
+        admin.pass_hash = generate_password_hash(new_password)
+        db.session.commit()
+
+        flash("Admin password changed successfully.")
+        return redirect(url_for("admin_dashboard"))
+    return render_template("admin_change_password.html")
 
 @app.route("/admin/companies")
 def admin_companies():
@@ -436,6 +443,15 @@ def company_dashboard():
     company = Company.query.get_or_404(session["user_id"])
     drives = PlacementDrive.query.filter_by(company_id = company.id).all()
     return render_template("company_dashboard.html", company = company, drives = drives)
+
+@app.route("/company/status")
+def company_status():
+    if not company_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    company = Company.query.get_or_404(session["user_id"])
+    drives = PlacementDrive.query.filter_by(company_id = company.id).all()
+    return render_template("company_status.html", company = company, drives = drives)
 
 @app.route("/company/drives")
 def company_drives():
@@ -663,6 +679,19 @@ def student_dashboard():
         student = student,
         applications = applications)
 
+@app.route("/student/status")
+def student_status():
+    if not student_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    
+    student = Student.query.get_or_404(session["user_id"])
+    applications = Application.query.filter_by(student_id = student.id).all()    
+    return render_template(
+        "student_dashboard.html",
+        student = student,
+        applications = applications)
+
 @app.route("/student/drives")
 def student_drives():
     if not student_logged_in():
@@ -701,6 +730,10 @@ def apply_drive(drive_id):
     drive = PlacementDrive.query.get_or_404(drive_id)
     company = Company.query.get_or_404(drive.company_id)
 
+    if drive.application_deadline <datetime.now():
+        flash("Application deadline has passed.")
+        return redirect(url_for("student_drives"))
+    
     if drive.status != "Approved":
         flash("You can apply to approved ones only.")
         return redirect(url_for("student_drives"))
@@ -738,6 +771,29 @@ def student_applications():
     applications = Application.query.filter_by(student_id = student_id).all()
 
     return render_template("student_applications.html", applications = applications)
+
+@app.route("/student/application/<int:application_id>/withdraw")
+def withdraw_application(application_id):
+    if not student_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    
+    application = Application.query.get_or_404(application_id)
+
+    if application.student_id != session["user_id"]:
+        flash("You are not allowed to withdraw this application.")
+        return redirect(url_for("student_applications"))
+    
+    if application.status in ["Selected", "Placed"]:
+        flash("This application cannot be withdrawn now")
+        return redirect(url_for("student_applications"))
+    
+    db.session.delete(application)
+    db.session.commit()
+
+    flash("Application withdrawn successfully.")
+    return redirect(url_for("student_applications"))
+
 
 @app.route("/student/history")
 def student_history():

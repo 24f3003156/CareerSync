@@ -27,7 +27,8 @@
             <th>Drive ID</th>
             <th>Application Date</th>                     
             <th>Status</th> 
-            <th>Remarks</th>           
+            <th>Remarks</th>
+            <th>Action</th>           
         </tr>
 
         {% for application in appliactions %}
@@ -37,7 +38,15 @@
             <td>{{ application.drive_id }}</td>            >
             <td>{{ application.application_date }}</td>
             <td>{{ application.status }}</td>
-            <td>{{ application.remarks }}</td>                     
+            <td>{{ application.remarks }}</td> 
+            <td>
+                {% if application.status != "Selected" and application.status != "Placed" %}
+                <a href="{{ url_for('withdraw_application', application_id = application.id)}}"
+                onclick="return confirm('Are you sure you want to withdraw this application')">Withdraw</a>
+                {% else %}
+                    Not Allowed
+                {% endif %}
+            </td>                    
         </tr>
         {% endfor %}
     </table>

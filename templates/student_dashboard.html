@@ -16,6 +16,7 @@
 
     <p><a href="{{ url_for('student_drives') }}">View Approved Drives</a></p>
     <p><a href="{{ url_for('student_applications') }}">My Applications</a></p>
+    <p><a href="{{ url_for('student_status') }}">View Current Status</a></p>
     <p><a href="{{ url_for('logout') }}">Logout</a></p>
 
     {% with messages = get_flashed_messages() %}
