@@ -1,3 +1,5 @@
+import os
+from werkzeug.utils import secure_filename
 from flask import Flask, render_template, request, redirect, url_for, flash, session 
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -7,8 +9,12 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///placement_portal.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = "career_sync_secret"
+app.config["ALLOWED_EXTENSIONS"] = {"pdf"}
 
 db.init_app(app)
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".",1)[1].lower() in app.config["ALLOWED_EXTENSIONS"]
 
 def admin_logged_in():
     return "user_id" in session and session.get("role") =="admin"
@@ -129,10 +135,23 @@ def register_student():
         degree = request.form.get("degree")
         branch = request.form.get("branch")
         cgpa = float(request.form.get("cgpa"))
-        skills = request.form.get("skills")
-        resume_filename = request.form.get("resume_filename")
+        skills = request.form.get("skills")        
         internship_experience = request.form.get("internship_experience")
         co_curricular_achievements = request.form.get("co_curricular_achievements")
+
+        resume = request.files.get("resume")
+
+        if not resume or resume.filename == "":
+            flash("Resume fiel is required.")
+            return redirect(url_for("register_student"))
+        
+        if not allowed_file(resume.filename):
+            flash("Only PDF resume files are allowed.")
+            return redirect(url_for("register_student"))
+        
+        resume_filename = secure_filename(resume.filename)        
+        resume_path = os.path.join(app.config["UPLOAD_FOLDER"], resume_filename)
+        resume.save(resume_path)
 
         existing_student = Student.query.filter_by(email = email).first()
 
@@ -346,6 +365,19 @@ def create_drive():
         application_deadline_str = request.form.get("application_deadline")
         application_deadline = datetime.strptime(application_deadline_str, "%Y-%m-%dT%H:%M")
 
+        if not job_title or not job_description or not eligibility_criteria or not skills_required or not location or not application_deadline_str:
+            flash("All required fields must be filled.")
+            return redirect(url_for("create_drive"))
+        try:
+            application_deadline = datetime.strptime(application_deadline_str, "%Y-%m-%dT%H:%M")
+        except:
+            flash("Invalid deadline format.")
+            return redirect(url_for("create_drive"))
+        
+        if application_deadline < datetime.now():
+            flash("Deadline cannot be in the past.")
+            return redirect(url_for("create_drive"))
+
         new_drive = PlacementDrive(
             company_id = session["user_id"],
             job_title = job_title,
@@ -449,6 +481,10 @@ def update_application_status(application_id):
     
     if request.method == "POST":
         new_status = request.form.get("status")
+        allowed_status = ["Shortlisted", "Selected", "Rejected", "Interview", "Placed"]
+        if new_status not in allowed_status:
+            flash("Invalid status selected.")
+            return redirect(url_for("company_drive_applications", drive_id = drive.id))
         application.status = new_status
 
         if new_status == "Placed":
