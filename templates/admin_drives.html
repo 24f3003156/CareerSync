@@ -39,8 +39,10 @@
             <td>{{ drive.application_deadline }}</td>
             <td>{{ drive.status }}</td>
             <td>
-                <a href="{{ url_for('approve_drive', drive_id = drive.id)}}">Approve</a>
-                <a href="{{ url_for('reject_drive', drive_id = drive.id)}}">Reject</a>
+                <a href="{{ url_for('approve_drive', drive_id = drive.id)}}"
+                onclick="return confirm('Are you sure you want to approve this placement drive?')">Approve</a>
+                <a href="{{ url_for('reject_drive', drive_id = drive.id)}}"
+                onclick="return confirm('Are you sure you want to reject this placement drive?')">Reject</a>
             </td>
         </tr>
         {% endfor %}

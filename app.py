@@ -208,6 +208,31 @@ def admin_dashboard():
     total_applications = Application.query.count()
     return render_template("admin_dashboard.html", total_companies = total_companies, total_students = total_students, total_drives = total_drives, total_applications = total_applications)
 
+@app.route("/admin/change-password", methods = ["GET", "POST"])
+def admin_change_password():
+    if not admin_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    
+    admin = Admin.query.get_or_404(session["user_id"])
+
+    if request.method == "POST":
+        current_password = request.form.get("current_password")
+        new_password = request.form.get("new_password")
+        confirm_password = request.form.get("confirm_password")
+
+        if not current_password or not new_password or not confirm_password:
+            flash("All fields are required.")
+            return redirect(url_for("admin_change_password"))
+        
+        if not check_password_hash(admin.pass_hash, current_password):
+            flash("Current password is incorrect.")
+            return redirect(url_for("admin_change_password"))
+        
+        if new_password != confirm_password:
+            flash("New password and confirm password do not match.")
+            return redirect(url_for("admin_change_password"))
+
 @app.route("/admin/companies")
 def admin_companies():
     if not admin_logged_in():
@@ -259,6 +284,49 @@ def blacklist_company(company_id):
     flash("Company blacklisted successfully.")
     return redirect(url_for("admin_companies"))
 
+@app.route("/admin/company/<int:company_id>/delete")
+def delete_company(company_id):
+    if not admin_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    
+    company = Company.query.get_or_404(company_id)
+    existing_drives = PlacementDrive.query.filter_by(company_id = company.id).first()
+    if existing_drives:
+        flash("Company cannot be deleted because it has placement drives.")
+        return redirect(url_for("admin_companies"))
+    db.session.delete(company)
+    db.session.commit()
+    flash("Company deleted successfully.")
+    return redirect(url_for("admin_companies"))
+
+@app.route("/admin/company/<int:company_id>/reset-password", methods = ["GET", "POST"])
+def reset_company_password(company_id):
+    if not admin_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    
+    company = Company.query.get_or_404(company_id)
+
+    if request.method == "POST":
+        new_password = request.form.get("new_password")
+        confirm_password = request.form.get("confirm_password")
+
+        if not new_password or not confirm_password:
+            flash("All fields are required.")
+            return redirect(url_for("reset_company_password", company_id = company.id))
+        
+        if new_password != confirm_password:
+            flash("Passwords do not match.")
+            return redirect(url_for("reset_company_password", company_id = company.id))
+        
+        company.pass_hash = generate_password_hash(new_password)
+        db.session.commit()
+
+        flash("Company password reset successfully.")
+        return redirect(url_for("admin_companies"))
+    return render_template("reset_company_password.html", company= company)
+    
 @app.route("/admin/drives")
 def admin_drives():
     if not admin_logged_in():
@@ -332,6 +400,33 @@ def activate_student(student_id):
     db.session.commit()
     flash("Student activated successfully.")
     return redirect(url_for("admin_students"))
+
+@app.route("/admin/student/<int:student_id>/reset-password", methods = ["GET", "POST"])
+def reset_student_password(student_id):
+    if not admin_logged_in():
+        flash("Unauthorized access.")
+        return redirect(url_for("login"))
+    
+    student = Student.query.get_or_404(student_id)
+
+    if request.method == "POST":
+        new_password = request.form.get("new_password")
+        confirm_password = request.form.get("confirm_password")
+
+        if not new_password or not confirm_password:
+            flash("All fields are required.")
+            return redirect(url_for("reset_student_password", student_id = student.id))
+        
+        if new_password != confirm_password:
+            flash("Passwords do not match.")
+            return redirect(url_for("reset_student_password", student_id = student_id))
+        
+        student.pass_hash = generate_password_hash(new_password)
+        db.session.commit()
+
+        flash("Student password reset successfully.")
+        return redirect(url_for("admin_students"))
+    return render_template("reset_student_password.html", student = student)
 
 @app.route("/company/dashboard")
 def company_dashboard():
@@ -424,7 +519,7 @@ def edit_drive(drive_id):
         allowed_cgpa_values = ["6.0", "6.5", "7.0", "7.5", "8.0", "8.5", "9.0"]
         if eligibility_criteria not in allowed_cgpa_values:
             flash("Please select a valid minimum CGPA.")
-            return redirect(url_for("create_drive", drive_id = drive_id))
+            return redirect(url_for("edit_drive", drive_id = drive_id))
         drive.eligibility_criteria = eligibility_criteria        
 
         drive.skills_required = request.form.get("skills_required")

@@ -57,6 +57,7 @@
                 {% else %}
                     <a href="{{ url_for('activate_student', student_id = student.id) }}">Activate</a>
                 {% endif %}
+                <a href="{{ url_for('reset_student_password', student_id = student.id) }}">Reset Password</a>
             </td>
         </tr>
         {% endfor %}
