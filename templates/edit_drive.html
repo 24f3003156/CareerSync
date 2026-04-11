@@ -28,15 +28,24 @@
         <textarea name="job_description" required>{{ drive.job_description }}</textarea>
         <br><br>
 
-        <label>Eligibilty Criteria</label>
-        <input type="text" name="eligibility_criteria" value="{{ drive.eligibility_criteria }}" required>
-
+        <label>Minimum CGPA</label>
+        <select name="eligibility_criteria" required>
+            <option value="">Select Minimum CGPA</option>
+            <option value="6.0" {% if drive.eligibility_criteria =="6.0" %}selected{% endif %}>6.0</option>
+            <option value="6.5" {% if drive.eligibility_criteria =="6.5" %}selected{% endif %}>6.0</option>
+            <option value="7.0" {% if drive.eligibility_criteria =="7.0" %}selected{% endif %}>6.0</option>
+            <option value="7.5" {% if drive.eligibility_criteria =="7.5" %}selected{% endif %}>6.0</option>
+            <option value="8.0" {% if drive.eligibility_criteria =="8.0" %}selected{% endif %}>6.0</option>
+            <option value="8.5" {% if drive.eligibility_criteria =="8.5" %}selected{% endif %}>6.0</option>
+            <option value="9.0" {% if drive.eligibility_criteria =="9.0" %}selected{% endif %}>6.0</option>
+        </select>
+        
         <label>Skills Required</label>
         <input type="text" name="skills_required" value="{{ drive.skills_required }}" required>
         <br><br>
 
         <label>Package Range</label>
-        <input type="text" name="package_range" value="{{ drive.package_range }}">
+        <input type="number" name="package_range" min="0" step="0.01" value="{{ drive.package_range }}">
         <br><br>
 
         <label>Location</label>
@@ -44,7 +53,7 @@
         <br><br>
 
         <label>Application Deadline</label>
-        <input type="datetime-local" name="application_deadline" required>
+        <input type="datetime-local" name="application_deadline" required min="{{ now }}">
         <br><br>
 
         <button type="submit">Update Drive</button>

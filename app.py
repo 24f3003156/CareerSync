@@ -9,6 +9,7 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///placement_portal.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = "career_sync_secret"
+app.config["UPLOAD_FOLDER"] = "static/uploads/resumes"
 app.config["ALLOWED_EXTENSIONS"] = {"pdf"}
 
 db.init_app(app)
@@ -142,7 +143,7 @@ def register_student():
         resume = request.files.get("resume")
 
         if not resume or resume.filename == "":
-            flash("Resume fiel is required.")
+            flash("Resume file is required.")
             return redirect(url_for("register_student"))
         
         if not allowed_file(resume.filename):
@@ -358,12 +359,23 @@ def create_drive():
     if request.method == "POST":
         job_title = request.form.get("job_title")
         job_description = request.form.get("job_description")
+
         eligibility_criteria = request.form.get("eligibility_criteria")
+        allowed_cgpa_values = ["6.0", "6.5", "7.0", "7.5", "8.0", "8.5", "9.0"]
+        if eligibility_criteria not in allowed_cgpa_values:
+            flash("Please select a valid minimum CGPA.")
+            return redirect(url_for("create_drive"))
+        
         skills_required = request.form.get("skills_required")
         package_range = request.form.get("package_range")
+        if package_range:
+            try:
+                package_range = float(package_range)
+            except:
+                flash("Package range must be a number.")
+                return redirect(url_for("create_drive"))
         location = request.form.get("location")
-        application_deadline_str = request.form.get("application_deadline")
-        application_deadline = datetime.strptime(application_deadline_str, "%Y-%m-%dT%H:%M")
+        application_deadline_str = request.form.get("application_deadline")        
 
         if not job_title or not job_description or not eligibility_criteria or not skills_required or not location or not application_deadline_str:
             flash("All required fields must be filled.")
@@ -393,7 +405,7 @@ def create_drive():
         db.session.commit()
         flash("Placement drive created successfully and sent for admin approval.")
         return redirect(url_for("company_drives"))
-    return render_template("create_drive.html")    
+    return render_template("create_drive.html", now = datetime.now().strftime("%Y-%m-%dT%H:%M"))    
 
 @app.route("/company/drive/<int:drive_id>/edit", methods = ["GET", "POST"])
 def edit_drive(drive_id):
@@ -407,18 +419,51 @@ def edit_drive(drive_id):
     if request.method =="POST":
         drive.job_title = request.form.get("job_title")
         drive.job_description = request.form.get("job_description")
-        drive.eligibility_criteria = request.form.get("eligibility_criteria")
+
+        eligibility_criteria = request.form.get("eligibility_criteria")
+        allowed_cgpa_values = ["6.0", "6.5", "7.0", "7.5", "8.0", "8.5", "9.0"]
+        if eligibility_criteria not in allowed_cgpa_values:
+            flash("Please select a valid minimum CGPA.")
+            return redirect(url_for("create_drive", drive_id = drive_id))
+        drive.eligibility_criteria = eligibility_criteria        
+
         drive.skills_required = request.form.get("skills_required")
-        drive.package_range = request.form.get("package_range")
+        package_range = request.form.get("package_range")
+        if package_range:
+            try:
+                drive.package_range = float(package_range)
+            except:
+                flash("Package range must be a number.")
+                return redirect(url_for("edit_drive", drive_id = drive_id))
+        else:
+            drive.package_range = None
+
         drive.location = request.form.get("location")
+
         application_deadline_str = request.form.get("application_deadline")
-        drive.application_deadline = datetime.strptime(application_deadline_str, "%Y-%m-%dT%H:%M")
+        if not application_deadline_str:
+            flash("Application deadline is required.")
+            return redirect(url_for("edit_drive", drive_id = drive_id))
+        try:
+            application_deadline = datetime.strptime(application_deadline_str, "%Y-%m-%dT%H:%M")
+        except:
+            flash("Invalid deadline format.")
+            return redirect(url_for("edit_drive", drive_id = drive_id))
+        
+        if application_deadline < datetime.now():
+            flash("Deadline cannot be in the past.")
+            return redirect(url_for("edit_drive", drive_id = drive_id))
+        
+        drive.application_deadline = application_deadline
 
         drive.status = "Pending"
         db.session.commit()
         flash("Placement drive updated and sent again for admin approval.")
         return redirect(url_for("company_drives"))
-    return render_template("edit_drive.html", drive = drive)
+    return render_template(
+        "edit_drive.html",
+          drive = drive,
+          now = datetime.now().strftime("%Y-%m-%dT%H:%M"))
 
 @app.route("/company/drive/<int:drive_id>/delete")
 def delete_drive(drive_id):
