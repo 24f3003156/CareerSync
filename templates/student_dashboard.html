@@ -1,31 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
-</head>
-<body>
-    <h1>Student Dashboard</h1>
-    
-    <p>Full Name: {{ student.full_name }}</p>
-    <p>Email: {{ student.email }}</p>
-    <p>Degree: {{ student.degree }}</p>
-    <p>Branch: {{ student.branch }}</p>
-    <p>CGPA: {{ student.cgpa }}</p>
+{% extends "base.html" %}
 
-    <p><a href="{{ url_for('student_drives') }}">View Approved Drives</a></p>
-    <p><a href="{{ url_for('student_applications') }}">My Applications</a></p>
-    <p><a href="{{ url_for('student_status') }}">View Current Status</a></p>
-    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+{% block title %}Student Dashboard - CareerSync{% endblock %}
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-   
-</body>
-</html>
+{% block content %}
+<h1>Student Dashboard</h1>
+
+<p>Full Name: {{ student.full_name }}</p>
+<p>Email: {{ student.email }}</p>
+<p>Degree: {{ student.degree }}</p>
+<p>Branch: {{ student.branch }}</p>
+<p>CGPA: {{ student.cgpa }}</p>
+
+<div class="nav-links">
+    <a href="{{ url_for('student_drives') }}">View Approved Drives</a>
+    <a href="{{ url_for('student_applications') }}">My Applications</a>
+    <a href="{{ url_for('student_status') }}">View Current Status</a>
+    <a href="{{ url_for('student_history') }}">Placement History</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</div>
+{% endblock %}

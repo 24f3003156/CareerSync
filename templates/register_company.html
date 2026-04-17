@@ -1,61 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Company Registration</title>
-</head>
-<body>
-    <form method = "POST">
-        <label>Company Name</label>
-        <input type ="text" name="company_name" required>
+{% extends "base.html" %}
 
-        <br><br>
+{% block title %}Company Registration - CareerSync{% endblock %}
 
-        <label>Email</label>
-        <input type="email" name="email" required>
+{% block content %}
+<h1>Company Registration</h1>
 
-        <br><br>
+<div class="nav-links">
+    <a href="{{ url_for('index') }}">Home</a>
+    <a href="{{ url_for('login') }}">Login</a>
+</div>
 
-        <label>Password</label>
-        <input type="password" name="password" required>
+<form method="POST">
+    <label>Company Name</label>
+    <input type="text" name="company_name" required>
 
-        <br><br>
+    <label>Email</label>
+    <input type="email" name="email" required>
 
-        <label>HR Contact</label>
-        <input type="number" name="hr_contact" required>
+    <label>Password</label>
+    <input type="password" name="password" required>
 
-        <br><br>
+    <label>HR Contact</label>
+    <input type="number" name="hr_contact" required>
 
-        <label>Website</label>
-        <input type="text" name="website" required>
+    <label>Website</label>
+    <input type="text" name="website" required>
 
-        <br><br>
-        <label>Domain</label>
-        <input type="text" name="domain" required>
+    <label>Domain</label>
+    <input type="text" name="domain" required>
 
-        <br><br>
+    <label>Description</label>
+    <textarea name="description" required></textarea>
 
-        <label>Description</label>
-        <textarea name="description" required></textarea>
+    <label>Type of Employment</label>
+    <input type="text" name="type_of_employment">
 
-        <br><br>
-
-        <label>Type of Employment</label>
-        <input type="text" name="type_of_employment">
-
-        <br><br>
-
-        <button type="submit">Register</button>
-    </form>
-
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-   
-</body>
-</html>
+    <button type="submit">Register</button>
+</form>
+{% endblock %}

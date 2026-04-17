@@ -1,33 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-</head>
-<body>
-    <h1>Admin Dashboard</h1>
-    
-    <p>Total Companies: {{ total_companies }}</p>
-    <p>Total Students: {{ total_students }}</p>
-    <p>Total Placement  Drives: {{ total_drives }}</p>
-    <p>Total Applications: {{ total_applications }}</p>
+{% extends "base.html" %}
 
-    <p><a href="{{ url_for('admin_companies')}}">Manage Companies</a></p>
-    <p><a href="{{ url_for('admin_drives')}}">Manage Placement Drives</a></p>
-    <p><a href="{{ url_for('admin_students')}}">Manage Students</a></p>
-    <p><a href="{{ url_for('admin_applications')}}">View Applications</a></p>
-    <p><a href="{{ url_for('admin_placements')}}">View Placement History</a></p>
-    <p><a href="{{ url_for('admin_change_password')}}">Change My Password</a></p>
-    <a href="{{ url_for('logout')}}">Logout</a>
+{% block title %}Admin Dashboard - CareerSync{% endblock %}
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-   
-</body>
-</html>
+{% block content %}
+<h1>Admin Dashboard</h1>
+
+<p>Total Companies: {{ total_companies }}</p>
+<p>Total Students: {{ total_students }}</p>
+<p>Total Placement Drives: {{ total_drives }}</p>
+<p>Total Applications: {{ total_applications }}</p>
+
+<div class="nav-links">
+    <a href="{{ url_for('admin_companies') }}">Manage Companies</a>
+    <a href="{{ url_for('admin_drives') }}">Manage Placement Drives</a>
+    <a href="{{ url_for('admin_students') }}">Manage Students</a>
+    <a href="{{ url_for('admin_applications') }}">View Applications</a>
+    <a href="{{ url_for('admin_placements') }}">View Placement History</a>
+    <a href="{{ url_for('admin_change_password') }}">Change My Password</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</div>
+{% endblock %}

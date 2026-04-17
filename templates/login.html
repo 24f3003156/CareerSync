@@ -1,45 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-<body>
-    <h1>Login</h1>
-    <form method="POST">
-        <label>Role</label>
-        <select name = "role" required>
-            <option value = "">Select Role</option>
-            <option value = "admin">Admin</option>
-            <option value = "company">Company</option>
-            <option value = "student">Student</option>
-        </select>
+{% extends "base.html" %}
 
-        <br><br>
+{% block title %}Login - CareerSync{% endblock %}
 
-        <label>Username / Email</label>
-        <input type ="text" name="email_or_username" required>
+{% block content %}
+<h1>Login</h1>
 
-        <br><br>
+<div class="nav-links">
+    <a href="{{ url_for('index') }}">Home</a>
+    <a href="{{ url_for('register_company') }}">Company Registration</a>
+    <a href="{{ url_for('register_student') }}">Student Registration</a>
+</div>
 
-        <label>Password</label>
-        <input type ="password" name = "password" required>
+<form method="POST">
+    <label>Role</label>
+    <select name="role" required>
+        <option value="">Select Role</option>
+        <option value="admin">Admin</option>
+        <option value="company">Company</option>
+        <option value="student">Student</option>
+    </select>
 
-        <br><br>
+    <label>Username / Email</label>
+    <input type="text" name="email_or_username" required>
 
-        <button type = "submit">Login</button>
-    </form>
+    <label>Password</label>
+    <input type="password" name="password" required>
 
-    <p><a href = "{{ url_for('register_company')}}">Register Company</a></p>
-    <p><a href = "{{ url_for('register_student')}}">Register Student</a></p>
-
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}    
-</body>
-</html>
+    <button type="submit">Login</button>
+</form>
+{% endblock %}

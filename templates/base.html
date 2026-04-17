@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CareerSync{% endblock %}</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 1100px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        h1, h2 {
+            color: #1f2937;
+        }
+
+        p, label, td, th, a, input, select, textarea, button {
+            font-size: 15px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #2563eb;
+            margin-right: 10px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .nav-links {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            background-color: #fee2e2;
+            color: #991b1b;
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        form {
+            margin-top: 15px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            max-width: 450px;
+            padding: 10px;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1d4ed8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: white;
+        }
+
+        table, th, td {
+            border: 1px solid #d1d5db;
+        }
+
+        th {
+            background-color: #e5e7eb;
+            text-align: left;
+            padding: 10px;
+        }
+
+        td {
+            padding: 10px;
+        }
+
+        .section {
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
