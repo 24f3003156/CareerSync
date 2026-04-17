@@ -581,13 +581,22 @@ def delete_drive(drive_id):
     if not company_logged_in():
         flash("Unauthorized access.")
         return redirect(url_for("login"))
+    
     drive = PlacementDrive.query.get_or_404(drive_id)
+    
     if drive.company_id != session["user_id"]:
         flash("You are not allowed to delete this drive.")
         return redirect(url_for("company_drives"))
     
+    existing_applications = Application.query.filter_by(drive_id = drive.id).first()
+
+    if existing_applications:
+        flash("Drive cannot be deleted because applications already exist.")
+        return redirect(url_for("company_drives"))
+    
     db.session.delete(drive)
     db.session.commit()
+
     flash("Placement drive deleted successfully.")
     return redirect(url_for("company_drives"))
 
@@ -634,6 +643,10 @@ def update_application_status(application_id):
     if drive.company_id != session["user_id"]:
         flash("You are not allowed to edit this application.")
         return redirect(url_for("company_drives"))
+    
+    if application.status == "Withdrawn":
+        flash("Withdrawn applications cannot be updated.")
+        return redirect(url_for("company_drive_applications", drive_id = drive.id))
     
     if request.method == "POST":
         new_status = request.form.get("status")
@@ -688,7 +701,7 @@ def student_status():
     student = Student.query.get_or_404(session["user_id"])
     applications = Application.query.filter_by(student_id = student.id).all()    
     return render_template(
-        "student_dashboard.html",
+        "student_status.html",
         student = student,
         applications = applications)
 
@@ -697,7 +710,8 @@ def student_drives():
     if not student_logged_in():
         flash("Unauthorized access.")
         return redirect(url_for("login"))
-
+    
+    student_id = session["user_id"]
     search_query = request.args.get("search")
     current_time = datetime.now()
     
@@ -715,9 +729,12 @@ def student_drives():
         drives = PlacementDrive.query.filter(
             (PlacementDrive.status =="Approved") &
             (PlacementDrive.application_deadline >= current_time) 
-        ).all()     
+        ).all() 
+
+    applications = Application.query.filter_by(student_id = student_id).all()
+    applied_drive_ids = [application.drive_id for application in applications]   
               
-    return render_template("student_drives.html", drives = drives)
+    return render_template("student_drives.html", drives = drives, applied_drive_ids = applied_drive_ids, current_time = current_time)
 
 @app.route("/student/drive/<int:drive_id>/apply")
 def apply_drive(drive_id):
@@ -785,10 +802,10 @@ def withdraw_application(application_id):
         return redirect(url_for("student_applications"))
     
     if application.status in ["Selected", "Placed"]:
-        flash("This application cannot be withdrawn now")
+        flash("This application cannot be withdrawn now.")
         return redirect(url_for("student_applications"))
     
-    db.session.delete(application)
+    application.status = "withdrawn"
     db.session.commit()
 
     flash("Application withdrawn successfully.")

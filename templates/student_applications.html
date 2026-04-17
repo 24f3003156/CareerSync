@@ -31,21 +31,26 @@
             <th>Action</th>           
         </tr>
 
-        {% for application in appliactions %}
+        {% for application in applications %}
         <tr>
             <td>{{ application.id }}</td>
             <td>{{ application.drive.job_title }}</td>
-            <td>{{ application.drive_id }}</td>            >
+            <td>{{ application.drive_id }}</td>            
             <td>{{ application.application_date }}</td>
             <td>{{ application.status }}</td>
             <td>{{ application.remarks }}</td> 
             <td>
-                {% if application.status != "Selected" and application.status != "Placed" %}
+                {% if application.status != "Selected" and application.status != "Placed" % and application.status != "Withdrawn" %}
                 <a href="{{ url_for('withdraw_application', application_id = application.id)}}"
-                onclick="return confirm('Are you sure you want to withdraw this application')">Withdraw</a>
+                onclick="return confirm('Are you sure you want to withdraw this application?')">Withdraw</a>
                 {% else %}
-                    Not Allowed
-                {% endif %}
+                    {% if application.status == "Withdrawn" %}
+                        Withdrawn
+                    {% else %}
+                        Not Allowed
+                    {% endif %}
+                {% endif%}
+
             </td>                    
         </tr>
         {% endfor %}

@@ -21,7 +21,7 @@
 
     <form method="POST">
         <label>Job Title</label>
-        <input type="text" name="job_title" value="{{ drive.job_description }}" required>
+        <input type="text" name="job_title" value="{{ drive.job_title }}" required>
         <br><br>
 
         <label>Job Description</label>
@@ -32,12 +32,12 @@
         <select name="eligibility_criteria" required>
             <option value="">Select Minimum CGPA</option>
             <option value="6.0" {% if drive.eligibility_criteria =="6.0" %}selected{% endif %}>6.0</option>
-            <option value="6.5" {% if drive.eligibility_criteria =="6.5" %}selected{% endif %}>6.0</option>
-            <option value="7.0" {% if drive.eligibility_criteria =="7.0" %}selected{% endif %}>6.0</option>
-            <option value="7.5" {% if drive.eligibility_criteria =="7.5" %}selected{% endif %}>6.0</option>
-            <option value="8.0" {% if drive.eligibility_criteria =="8.0" %}selected{% endif %}>6.0</option>
-            <option value="8.5" {% if drive.eligibility_criteria =="8.5" %}selected{% endif %}>6.0</option>
-            <option value="9.0" {% if drive.eligibility_criteria =="9.0" %}selected{% endif %}>6.0</option>
+            <option value="6.5" {% if drive.eligibility_criteria =="6.5" %}selected{% endif %}>6.5</option>
+            <option value="7.0" {% if drive.eligibility_criteria =="7.0" %}selected{% endif %}>7.0</option>
+            <option value="7.5" {% if drive.eligibility_criteria =="7.5" %}selected{% endif %}>7.5</option>
+            <option value="8.0" {% if drive.eligibility_criteria =="8.0" %}selected{% endif %}>8.0</option>
+            <option value="8.5" {% if drive.eligibility_criteria =="8.5" %}selected{% endif %}>8.5</option>
+            <option value="9.0" {% if drive.eligibility_criteria =="9.0" %}selected{% endif %}>9.0</option>
         </select>
         
         <label>Skills Required</label>

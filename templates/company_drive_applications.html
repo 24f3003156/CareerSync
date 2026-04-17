@@ -37,7 +37,11 @@
             <td>{{ application.status }}</td>
             <td>{{ application.remarks }}</td>
             <td>
-                <a href="{{ url_for('update_application_status', application_id = application.id) }}">Update Status</a>                
+                {% if application.status == "Withdrawn" %}
+                    Withdrawn
+                {% else %}
+                    <a href="{{ url_for('update_application_status', application_id = application.id) }}">Update Status</a>
+                {% endif %}                
             </td>         
         </tr>
         {% endfor %}

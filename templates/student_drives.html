@@ -47,7 +47,13 @@
             <td>{{ drive.application_deadline }}</td>
             <td>{{ drive.status }}</td>
             <td>
-                <a href="{{ url_for('apply_drive', drive_id = drive.id) }}">Apply</a>                
+                {% if drive.id in applied_drive_ids %}
+                    Already applied
+                {% elif drive.application_deadline < current_time %}
+                    Expired
+                {% else %}
+                    <a href="{{ url_for('apply_drive', drive_id = drive.id) }}">Apply</a>
+                {% endif %}                
             </td>         
         </tr>
         {% endfor %}
