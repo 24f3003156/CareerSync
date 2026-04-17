@@ -1,45 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Placement History</title>
-</head>
-<body>
-    <h1>Placement History</h1>
+{% extends "base.html" %}
 
-    <p><a href="{{ url_for('student_dashboard') }}">Back to Student Dashboard</a></p>
-    <p><a href="{{ url_for('student_applications') }}">My Applications</a></p>
-    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+{% block title %}Placement History - CareerSync{% endblock %}
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+{% block content %}
+<h1>Placement History</h1>
 
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>Placement ID</th>
-            <th>Drive ID</th>
-            <th>Company ID</th>
-            <th>Placed On</th>
-            <th>Final Status</th>           
-            <th>Top 50 packages</th>                      
-        </tr>
+<div class="nav-links">
+    <a href="{{ url_for('student_dashboard') }}">Back to Student Dashboard</a>
+    <a href="{{ url_for('student_applications') }}">My Applications</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</div>
 
-        {% for placement in placements %}
-        <tr>
-            <td>{{ placement.id }}</td>
-            <td>{{ placement.drive_id }}</td>
-            <td>{{ placement.company_id }}</td>
-            <td>{{ placement.placed_on }}</td>
-            <td>{{ placement.final_status }}</td>
-            <td>{{ placement.top_50_packages }}</td>                    
-        </tr>
-        {% endfor %}
-    </table>  
-</body>
-</html>
+<table>
+    <tr>
+        <th>Placement ID</th>
+        <th>Drive ID</th>
+        <th>Company ID</th>
+        <th>Placed On</th>
+        <th>Final Status</th>
+        <th>Top 50 Packages</th>
+    </tr>
+
+    {% for placement in placements %}
+    <tr>
+        <td>{{ placement.id }}</td>
+        <td>{{ placement.drive_id }}</td>
+        <td>{{ placement.company_id }}</td>
+        <td>{{ placement.placed_on }}</td>
+        <td>{{ placement.final_status }}</td>
+        <td>{{ placement.top_50_packages }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

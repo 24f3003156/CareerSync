@@ -1,66 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Students</title>
-</head>
-<body>
-    <h1>Manage Students</h1>
+{% extends "base.html" %}
 
-    <p><a href="{{ url_for('admin_dashboard') }}">Back to Admin Dashboard</a></p>
-    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+{% block title %}Manage Students - CareerSync{% endblock %}
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+{% block content %}
+<h1>Manage Students</h1>
 
-    <form method="GET" action="{{ url_for('admin_students') }}">
-        <input type="text" name="search" placeholder="Search by name, email, phone or ID">
-        <button type="submit">Search</button>
-    </form>
+<div class="nav-links">
+    <a href="{{ url_for('admin_dashboard') }}">Back to Admin Dashboard</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</div>
 
-    <br>
+<form method="GET" action="{{ url_for('admin_students') }}">
+    <label>Search Students</label>
+    <input type="text" name="search" placeholder="Search by name, email, or ID">
+    <button type="submit">Search</button>
+</form>
 
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>ID</th>
-            <th>Full Name</th>
-            <th>Email</th>
-            <th>Phone Number</th>
-            <th>Degree</th>
-            <th>Branch</th>
-            <th>CGPA</th>
-            <th>Skills</th>
-            <th>Active Status</th>
-            <th>Action</th>
-        </tr>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>Degree</th>
+        <th>Branch</th>
+        <th>CGPA</th>
+        <th>Skills</th>
+        <th>Active Status</th>
+        <th>Action</th>
+    </tr>
 
-        {% for student in students %}
-        <tr>
-            <td>{{ student.id }}</td>
-            <td>{{ student.full_name }}</td>
-            <td>{{ student.email }}</td>
-            <td>{{ student.phone_number }}</td>
-            <td>{{ student.degree }}</td>
-            <td>{{ student.branch }}</td>
-            <td>{{ student.cgpa }}</td>
-            <td>{{ student.skills }}</td>
-            <td>{{ student.is_active }}</td>
-            <td>
-                {% if student.is_active %}
-                    <a href="{{ url_for('deactivate_student', student_id = student.id) }}">Deactivate</a>
-                {% else %}
-                    <a href="{{ url_for('activate_student', student_id = student.id) }}">Activate</a>
-                {% endif %}
-                <a href="{{ url_for('reset_student_password', student_id = student.id) }}">Reset Password</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>    
-</body>
-</html>
+    {% for student in students %}
+    <tr>
+        <td>{{ student.id }}</td>
+        <td>{{ student.full_name }}</td>
+        <td>{{ student.email }}</td>
+        <td>{{ student.phone_number }}</td>
+        <td>{{ student.degree }}</td>
+        <td>{{ student.branch }}</td>
+        <td>{{ student.cgpa }}</td>
+        <td>{{ student.skills }}</td>
+        <td>{{ student.is_active }}</td>
+        <td>
+            {% if student.is_active %}
+                <a href="{{ url_for('deactivate_student', student_id = student.id) }}">Deactivate</a>
+            {% else %}
+                <a href="{{ url_for('activate_student', student_id = student.id) }}">Activate</a>
+            {% endif %}
+            <a href="{{ url_for('reset_student_password', student_id = student.id) }}">Reset Password</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

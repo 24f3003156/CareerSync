@@ -1,46 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Status</title>
-</head>
-<body>
-    <h1>My Current Status</h1>
+{% extends "base.html" %}
 
-    <p><a href="{{ url_for('student_dashboard') }}">Back to Student Dashboard</a></p>    
-    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+{% block title %}Student Status - CareerSync{% endblock %}
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+{% block content %}
+<h1>My Current Status</h1>
 
-    <h2>Student Details</h2>
-    <p>Name: {{ student.full_name }}</p>
-    <p>Email: {{ student.email }}</p>
-    <p>Active Status: {{ student.is_active }} </p>
+<div class="nav-links">
+    <a href="{{ url_for('student_dashboard') }}">Back to Student Dashboard</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</div>
 
-    <h2>Application Status</h2>
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>Job Title</th>
-            <th>Company</th>
-            <th>Status</th>
-            <th>Remarks</th>
-        </tr>
+<h2>Student Details</h2>
+<p>Name: {{ student.full_name }}</p>
+<p>Email: {{ student.email }}</p>
+<p>Active Status: {{ student.is_active }}</p>
 
-        {% for application in applications %}
-        <tr>
-            <td>{{ application.drive.job_title }}</td>
-            <td>{{ application.drive.company.company_name }}</td>
-            <td>{{ application.status }}</td>
-            <td>{{ application.remarks }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</body>
-</html>
+<h2>Application Status</h2>
+<table>
+    <tr>
+        <th>Job Title</th>
+        <th>Company</th>
+        <th>Status</th>
+        <th>Remarks</th>
+    </tr>
+
+    {% for application in applications %}
+    <tr>
+        <td>{{ application.drive.job_title }}</td>
+        <td>{{ application.drive.company.company_name }}</td>
+        <td>{{ application.status }}</td>
+        <td>{{ application.remarks }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

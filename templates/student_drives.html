@@ -1,62 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Approved Drives</title>
-</head>
-<body>
-    <h1>Approved Placement Drives</h1>
+{% extends "base.html" %}
 
-    <p><a href="{{ url_for('student_dashboard') }}">Back to Student Dashboard</a></p>
-    <p><a href="{{ url_for('student_applications') }}">My Applications</a></p>
-    <p><a href="{{ url_for('logout') }}">Logout</a></p>
-    <p><a href="{{ url_for('student_history') }}">Placement History</a></p>
+{% block title %}Available Drives - CareerSync{% endblock %}
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+{% block content %}
+<h1>Available Placement Drives</h1>
 
-    <form method="GET" action="{{ url_for('student_drives') }}">
-        <input type="text" name="search" placeholder="Search by job title, skills or location">
-        <button type="submit">Search</button>
-    </form>
-    <br>
+<div class="nav-links">
+    <a href="{{ url_for('student_dashboard') }}">Back to Dashboard</a>
+    <a href="{{ url_for('student_applications') }}">My Applications</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</div>
 
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>ID</th>
-            <th>Job Title</th>
-            <th>Location</th>
-            <th>Skills Required</th>
-            <th>Deadline</th>           
-            <th>Status</th> 
-            <th>Action</th>           
-        </tr>
+<form method="GET">
+    <label>Search</label>
+    <input type="text" name="search" placeholder="Search by title, skills, or location">
+    <button type="submit">Search</button>
+</form>
 
-        {% for drive in drives %}
-        <tr>
-            <td>{{ drive.id }}</td>
-            <td>{{ drive.job_title }}</td>
-            <td>{{ drive.location }}</td>
-            <td>{{ drive.skills_required }}</td>
-            <td>{{ drive.application_deadline }}</td>
-            <td>{{ drive.status }}</td>
-            <td>
-                {% if drive.id in applied_drive_ids %}
-                    Already applied
-                {% elif drive.application_deadline < current_time %}
-                    Expired
-                {% else %}
-                    <a href="{{ url_for('apply_drive', drive_id = drive.id) }}">Apply</a>
-                {% endif %}                
-            </td>         
-        </tr>
-        {% endfor %}
-    </table>  
-</body>
-</html>
+<table>
+    <tr>
+        <th>Drive ID</th>
+        <th>Job Title</th>
+        <th>Skills Required</th>
+        <th>Location</th>
+        <th>Deadline</th>
+        <th>Action</th>
+    </tr>
+
+    {% for drive in drives %}
+    <tr>
+        <td>{{ drive.id }}</td>
+        <td>{{ drive.job_title }}</td>
+        <td>{{ drive.skills_required }}</td>
+        <td>{{ drive.location }}</td>
+        <td>{{ drive.application_deadline }}</td>
+        <td>
+            {% if drive.id in applied_drive_ids %}
+                Already Applied
+            {% elif drive.application_deadline < current_time %}
+                Expired
+            {% else %}
+                <a href="{{ url_for('apply_drive', drive_id = drive.id) }}">Apply</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

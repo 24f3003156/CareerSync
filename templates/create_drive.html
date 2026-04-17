@@ -1,63 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Placement Drive</title>
-</head>
-<body>
-    <h1>Create Placement Drive</h1>
+{% extends "base.html" %}
 
-    <p><a href="{{ url_for('company_dashboard') }}">Back to Company Dashboard</a></p>
-    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+{% block title %}Create Placement Drive - CareerSync{% endblock %}
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+{% block content %}
+<h1>Create Placement Drive</h1>
 
-    <form method="POST">
-        <label>Job Title</label>
-        <input type="text" name="job_title" required>
-        <br><br>
+<div class="nav-links">
+    <a href="{{ url_for('company_dashboard') }}">Back to Company Dashboard</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</div>
 
-        <label>Job Description</label>
-        <textarea name="job_description" required></textarea>
-        <br><br>
-        
-        <label>Minimum CGPA</label>
-        <select name="eligibility_criteria" required>
-            <option value="">Select Minimum CGPA</option>
-            <option value="6.0">6.0</option>
-            <option value="6.5">6.5</option>
-            <option value="7.0">7.0</option>
-            <option value="7.5">7.5</option>
-            <option value="8.0">8.0</option>
-            <option value="8.5">8.5</option>
-            <option value="9.0">9.0</option>
-        </select>
+<form method="POST">
+    <label>Job Title</label>
+    <input type="text" name="job_title" required>
 
-        <label>Skills Required</label>
-        <input type="text" name="skills_required" required>
-        <br><br>
+    <label>Job Description</label>
+    <textarea name="job_description" required></textarea>
 
-        <label>Package Range</label>
-        <input type="number" name="package_range" min="0" step="0.01">
-        <br><br>
+    <label>Minimum CGPA</label>
+    <select name="eligibility_criteria" required>
+        <option value="">Select Minimum CGPA</option>
+        <option value="6.0">6.0</option>
+        <option value="6.5">6.5</option>
+        <option value="7.0">7.0</option>
+        <option value="7.5">7.5</option>
+        <option value="8.0">8.0</option>
+        <option value="8.5">8.5</option>
+        <option value="9.0">9.0</option>
+    </select>
 
-        <label>Location</label>
-        <input type="text" name="location" required>
-        <br><br>
+    <label>Skills Required</label>
+    <input type="text" name="skills_required" required>
 
-        <label>Application Deadline</label>
-        <input type="datetime-local" name="application_deadline" required min="{{ now }}">
-        <br><br>
+    <label>Package Range</label>
+    <input type="number" name="package_range" min="0" step="0.01">
 
-        <button type="submit">Create Drive</button>
-    </form>
-    
-</body>
-</html>
+    <label>Location</label>
+    <input type="text" name="location" required>
+
+    <label>Application Deadline</label>
+    <input type="datetime-local" name="application_deadline" required min="{{ now }}">
+
+    <button type="submit">Create Drive</button>
+</form>
+{% endblock %}
