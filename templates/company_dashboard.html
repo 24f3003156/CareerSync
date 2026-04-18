@@ -31,6 +31,7 @@
         font-weight: 800;
         background: linear-gradient(135deg, var(--primary), #EC4899);
         -webkit-background-clip: text;
+        background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 8px;
         line-height: 1.2;
@@ -41,6 +42,24 @@
         color: var(--text-muted);
         text-transform: uppercase;
         letter-spacing: 0.08em;
+    }
+    .status-approved {
+        border-color: rgba(16, 185, 129, 0.5) !important;
+    }
+    .status-approved .stat-value {
+        background: linear-gradient(135deg, #059669, #10b981) !important;
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+    }
+    .status-pending {
+        border-color: rgba(245, 158, 11, 0.5) !important;
+    }
+    .status-pending .stat-value {
+        background: linear-gradient(135deg, #d97706, #f59e0b) !important;
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
     }
 </style>
 
@@ -60,8 +79,8 @@
         <div class="stat-value" style="font-size: 1.2rem;">{{ company.email }}</div>
         <div class="stat-label">Email</div>
     </div>
-    <div class="stat-card" style="border: 1px solid {% if company.approval_status == 'Approved' %}rgba(16, 185, 129, 0.5){% else %}rgba(245, 158, 11, 0.5){% endif %};">
-        <div class="stat-value" style="background: {% if company.approval_status == 'Approved' %}linear-gradient(135deg, #059669, #10b981){% else %}linear-gradient(135deg, #d97706, #f59e0b){% endif %}; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+    <div class="stat-card {% if company.approval_status == 'Approved' %}status-approved{% else %}status-pending{% endif %}">
+        <div class="stat-value">
             {{ company.approval_status }}
         </div>
         <div class="stat-label">Approval Status</div>
