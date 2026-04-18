@@ -3,29 +3,223 @@
 {% block title %}Login - CareerSync{% endblock %}
 
 {% block content %}
-<h1>Login</h1>
+<style>
+    .auth-container {
+        max-width: 480px;
+        margin: 60px auto;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .auth-container::before {
+        content: '';
+        position: absolute;
+        top: -50px;
+        left: -50px;
+        width: 150px;
+        height: 150px;
+        background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+    }
 
-<div class="nav-links">
-    <a href="{{ url_for('index') }}">Home</a>
-    <a href="{{ url_for('register_company') }}">Company Registration</a>
-    <a href="{{ url_for('register_student') }}">Student Registration</a>
+    .auth-header {
+        text-align: center;
+        margin-bottom: 30px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .auth-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 8px;
+        background: linear-gradient(135deg, var(--primary), #EC4899);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        border: none;
+    }
+
+    .auth-header p {
+        color: var(--text-muted);
+        font-weight: 500;
+        margin: 0;
+    }
+
+    .auth-form {
+        position: relative;
+        z-index: 1;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .auth-form input, .auth-form select {
+        max-width: 100%;
+        background: rgba(255, 255, 255, 0.6);
+        padding: 14px 16px;
+    }
+
+    .auth-form button[type="submit"] {
+        width: 100%;
+        margin-top: 10px;
+        padding: 14px;
+        font-size: 1.1rem;
+    }
+
+    .auth-footer {
+        margin-top: 30px;
+        text-align: center;
+        font-size: 0.95rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .auth-footer p {
+        margin: 8px 0;
+        color: var(--text-muted);
+    }
+
+    .auth-footer a {
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--primary), #EC4899);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-decoration: none;
+        transition: opacity 0.2s ease;
+    }
+    
+    .auth-footer a:hover {
+        opacity: 0.8;
+        text-shadow: none;
+    }
+
+    .role-selector {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+        margin-top: 4px;
+    }
+
+    .role-card {
+        cursor: pointer;
+        display: block;
+    }
+
+    .role-card input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .role-content {
+        background: rgba(255, 255, 255, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        border-radius: 12px;
+        padding: 16px 8px;
+        text-align: center;
+        transition: all 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .role-icon {
+        font-size: 1.5rem;
+    }
+
+    .role-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-muted);
+    }
+
+    .role-card:hover .role-content {
+        background: rgba(255, 255, 255, 0.7);
+        transform: translateY(-2px);
+    }
+
+    .role-card input[type="radio"]:checked + .role-content {
+        background: rgba(255, 255, 255, 0.9);
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3), 0 4px 12px rgba(139, 92, 246, 0.1);
+    }
+
+    .role-card input[type="radio"]:checked + .role-content .role-title {
+        color: var(--primary);
+    }
+</style>
+
+<div class="auth-container">
+    <div class="auth-header">
+        <h1>Welcome Back</h1>
+        <p>Sign in to continue to CareerSync</p>
+    </div>
+
+    <form method="POST" class="auth-form">
+        <label>Select your Role</label>
+        <div class="role-selector">
+            <label class="role-card">
+                <input type="radio" name="role" value="student" required>
+                <div class="role-content">
+                    <span class="role-icon">🎓</span>
+                    <span class="role-title">Student</span>
+                </div>
+            </label>
+            <label class="role-card">
+                <input type="radio" name="role" value="company">
+                <div class="role-content">
+                    <span class="role-icon">🏢</span>
+                    <span class="role-title">Company</span>
+                </div>
+            </label>
+            <label class="role-card">
+                <input type="radio" name="role" value="admin">
+                <div class="role-content">
+                    <span class="role-icon">🛡️</span>
+                    <span class="role-title">Admin</span>
+                </div>
+            </label>
+        </div>
+
+        <label>Username / Email</label>
+        <input type="text" name="email_or_username" placeholder="Enter your email or username" required>
+
+        <label>Password</label>
+        <div class="password-wrapper">
+            <input type="password" name="password" placeholder="Enter your password" required>
+            <button type="button" class="password-toggle" title="Toggle Password Visibility">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            </button>
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <div class="auth-footer">
+        <p>Don't have an account?</p>
+        <p>
+            <a href="{{ url_for('register_student') }}">Sign up as Student</a> &nbsp;&bull;&nbsp; 
+            <a href="{{ url_for('register_company') }}">Sign up as Company</a>
+        </p>
+    </div>
 </div>
-
-<form method="POST">
-    <label>Role</label>
-    <select name="role" required>
-        <option value="">Select Role</option>
-        <option value="admin">Admin</option>
-        <option value="company">Company</option>
-        <option value="student">Student</option>
-    </select>
-
-    <label>Username / Email</label>
-    <input type="text" name="email_or_username" required>
-
-    <label>Password</label>
-    <input type="password" name="password" required>
-
-    <button type="submit">Login</button>
-</form>
 {% endblock %}

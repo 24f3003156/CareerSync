@@ -3,38 +3,142 @@
 {% block title %}Company Registration - CareerSync{% endblock %}
 
 {% block content %}
-<h1>Company Registration</h1>
+<style>
+    .auth-container {
+        max-width: 600px;
+        margin: 60px auto;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .auth-container::before {
+        content: '';
+        position: absolute;
+        top: -50px;
+        left: -50px;
+        width: 150px;
+        height: 150px;
+        background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+    }
 
-<div class="nav-links">
-    <a href="{{ url_for('index') }}">Home</a>
-    <a href="{{ url_for('login') }}">Login</a>
+    .auth-header {
+        text-align: center;
+        margin-bottom: 30px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .auth-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 8px;
+        background: linear-gradient(135deg, var(--primary), #EC4899);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        border: none;
+    }
+
+    .auth-header p {
+        color: var(--text-muted);
+        font-weight: 500;
+        margin: 0;
+    }
+
+    .auth-form {
+        position: relative;
+        z-index: 1;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .auth-form input, .auth-form textarea {
+        max-width: 100%;
+        background: rgba(255, 255, 255, 0.6);
+        padding: 14px 16px;
+    }
+
+    .auth-form button[type="submit"] {
+        width: 100%;
+        margin-top: 20px;
+        padding: 14px;
+        font-size: 1.1rem;
+    }
+
+    .auth-footer {
+        margin-top: 30px;
+        text-align: center;
+        font-size: 0.95rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .auth-footer a {
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--primary), #EC4899);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-decoration: none;
+    }
+</style>
+
+<div class="auth-container">
+    <div class="auth-header">
+        <h1>Company Registration</h1>
+        <p>Join CareerSync to hire top talent</p>
+    </div>
+
+    <form method="POST" class="auth-form">
+        <label>Company Name</label>
+        <input type="text" name="company_name" placeholder="E.g. TechNova Solutions" required>
+
+        <label>Email</label>
+        <input type="email" name="email" placeholder="company@example.com" required>
+
+        <label>Password</label>
+        <div class="password-wrapper">
+            <input type="password" name="password" placeholder="Create a strong password" required>
+            <button type="button" class="password-toggle" title="Toggle Password Visibility">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            </button>
+        </div>
+
+        <label>HR Contact</label>
+        <input type="number" name="hr_contact" placeholder="Phone number" required>
+
+        <label>Website</label>
+        <input type="text" name="website" placeholder="https://example.com" required>
+
+        <label>Domain</label>
+        <input type="text" name="domain" placeholder="E.g. Software, Finance, Healthcare" required>
+
+        <label>Description</label>
+        <textarea name="description" placeholder="Tell us about your company..." required></textarea>
+
+        <label>Type of Employment</label>
+        <input type="text" name="type_of_employment" placeholder="Full-time, Internship, etc.">
+
+        <button type="submit">Create Company Account</button>
+    </form>
+
+    <div class="auth-footer">
+        <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+    </div>
 </div>
-
-<form method="POST">
-    <label>Company Name</label>
-    <input type="text" name="company_name" required>
-
-    <label>Email</label>
-    <input type="email" name="email" required>
-
-    <label>Password</label>
-    <input type="password" name="password" required>
-
-    <label>HR Contact</label>
-    <input type="number" name="hr_contact" required>
-
-    <label>Website</label>
-    <input type="text" name="website" required>
-
-    <label>Domain</label>
-    <input type="text" name="domain" required>
-
-    <label>Description</label>
-    <textarea name="description" required></textarea>
-
-    <label>Type of Employment</label>
-    <input type="text" name="type_of_employment">
-
-    <button type="submit">Register</button>
-</form>
 {% endblock %}

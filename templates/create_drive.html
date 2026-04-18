@@ -17,17 +17,79 @@
     <label>Job Description</label>
     <textarea name="job_description" required></textarea>
 
+<style>
+    .cgpa-selector {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+        gap: 8px;
+        margin-bottom: 20px;
+        margin-top: 4px;
+    }
+    .cgpa-card {
+        cursor: pointer;
+        display: block;
+    }
+    .cgpa-card input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .cgpa-content {
+        background: rgba(255, 255, 255, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        border-radius: 8px;
+        padding: 10px 4px;
+        text-align: center;
+        transition: all 0.2s ease;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--text-muted);
+    }
+    .cgpa-card:hover .cgpa-content {
+        background: rgba(255, 255, 255, 0.7);
+        transform: translateY(-1px);
+    }
+    .cgpa-card input[type="radio"]:checked + .cgpa-content {
+        background: rgba(255, 255, 255, 0.9);
+        border-color: var(--primary);
+        color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3), 0 4px 10px rgba(139, 92, 246, 0.1);
+    }
+</style>
+
     <label>Minimum CGPA</label>
-    <select name="eligibility_criteria" required>
-        <option value="">Select Minimum CGPA</option>
-        <option value="6.0">6.0</option>
-        <option value="6.5">6.5</option>
-        <option value="7.0">7.0</option>
-        <option value="7.5">7.5</option>
-        <option value="8.0">8.0</option>
-        <option value="8.5">8.5</option>
-        <option value="9.0">9.0</option>
-    </select>
+    <div class="cgpa-selector">
+        <label class="cgpa-card">
+            <input type="radio" name="eligibility_criteria" value="6.0" required>
+            <div class="cgpa-content">6.0</div>
+        </label>
+        <label class="cgpa-card">
+            <input type="radio" name="eligibility_criteria" value="6.5">
+            <div class="cgpa-content">6.5</div>
+        </label>
+        <label class="cgpa-card">
+            <input type="radio" name="eligibility_criteria" value="7.0">
+            <div class="cgpa-content">7.0</div>
+        </label>
+        <label class="cgpa-card">
+            <input type="radio" name="eligibility_criteria" value="7.5">
+            <div class="cgpa-content">7.5</div>
+        </label>
+        <label class="cgpa-card">
+            <input type="radio" name="eligibility_criteria" value="8.0">
+            <div class="cgpa-content">8.0</div>
+        </label>
+        <label class="cgpa-card">
+            <input type="radio" name="eligibility_criteria" value="8.5">
+            <div class="cgpa-content">8.5</div>
+        </label>
+        <label class="cgpa-card">
+            <input type="radio" name="eligibility_criteria" value="9.0">
+            <div class="cgpa-content">9.0</div>
+        </label>
+    </div>
 
     <label>Skills Required</label>
     <input type="text" name="skills_required" required>

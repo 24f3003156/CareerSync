@@ -3,20 +3,66 @@
 {% block title %}Admin Dashboard - CareerSync{% endblock %}
 
 {% block content %}
-<h1>Admin Dashboard</h1>
+<style>
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 24px;
+        margin-top: 24px;
+    }
+    .stat-card {
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 30px 24px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.04);
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(139, 92, 246, 0.15);
+        border-color: rgba(139, 92, 246, 0.3);
+    }
+    .stat-value {
+        font-size: 3.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--primary), #EC4899);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 8px;
+        line-height: 1;
+    }
+    .stat-label {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+</style>
 
-<p>Total Companies: {{ total_companies }}</p>
-<p>Total Students: {{ total_students }}</p>
-<p>Total Placement Drives: {{ total_drives }}</p>
-<p>Total Applications: {{ total_applications }}</p>
+<h1>Admin Overview</h1>
+<p style="color: var(--text-muted); margin-bottom: 30px; font-size: 1.1rem;">Welcome back! Here is a summary of the current platform metrics.</p>
 
-<div class="nav-links">
-    <a href="{{ url_for('admin_companies') }}">Manage Companies</a>
-    <a href="{{ url_for('admin_drives') }}">Manage Placement Drives</a>
-    <a href="{{ url_for('admin_students') }}">Manage Students</a>
-    <a href="{{ url_for('admin_applications') }}">View Applications</a>
-    <a href="{{ url_for('admin_placements') }}">View Placement History</a>
-    <a href="{{ url_for('admin_change_password') }}">Change My Password</a>
-    <a href="{{ url_for('logout') }}">Logout</a>
+<div class="dashboard-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ total_companies }}</div>
+        <div class="stat-label">Companies</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ total_students }}</div>
+        <div class="stat-label">Students</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ total_drives }}</div>
+        <div class="stat-label">Placement Drives</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ total_applications }}</div>
+        <div class="stat-label">Applications</div>
+    </div>
 </div>
 {% endblock %}

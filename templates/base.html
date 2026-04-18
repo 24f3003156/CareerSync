@@ -1,138 +1,568 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}CareerSync{% endblock %}</title>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary: #8B5CF6;
+            --primary-hover: #7C3AED;
+            --primary-light: rgba(139, 92, 246, 0.2);
+            --text-main: #0f172a;
+            --text-muted: #334155;
+            --glass-bg: rgba(255, 255, 255, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f8;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
+            line-height: 1.5;
+            color: var(--text-main);
+            background-color: #fdf2f8;
+            /* Soft pinkish background base */
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 90% 10%, rgba(236, 72, 153, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(14, 165, 233, 0.3) 0%, transparent 50%);
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        .app-layout {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: rgba(30, 27, 75, 0.65);
+            /* Deep translucent violet */
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-right: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        /* Subtle glowing orb in sidebar background */
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sidebar-header .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
+            border-left: 1px solid rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 800;
+            font-size: 18px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), inset 0 0 10px rgba(255, 255, 255, 0.1);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .sidebar-nav {
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sidebar-nav a {
+            padding: 12px 16px;
+            color: #e0e7ff;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            border-left: 3px solid transparent;
+            margin-bottom: 2px;
+            background: transparent;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            color: #ffffff;
+            border-left-color: #c084fc;
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: transparent;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .topbar {
+            height: 70px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            justify-content: flex-end;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 14px;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #EC4899);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.5);
         }
 
         .container {
-            width: 85%;
-            max-width: 1100px;
-            margin: 30px auto;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            width: 95%;
+            max-width: 1280px;
+            margin: 32px auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid rgba(255, 255, 255, 0.8);
+            border-left: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: var(--glass-shadow);
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
         }
 
-        h1, h2 {
-            color: #1f2937;
+        .container .nav-links {
+            display: none !important;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: var(--text-main);
             margin-top: 0;
+            font-weight: 700;
+            letter-spacing: -0.025em;
         }
 
-        p, td, th, a, button {
+        h1 {
+            font-size: 2.25rem;
+            margin-bottom: 24px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding-bottom: 16px;
+        }
+
+        p,
+        td,
+        th,
+        button {
             font-size: 15px;
         }
 
         a {
             text-decoration: none;
-            color: #2563eb;
-            margin-right: 10px;
+            color: var(--primary);
+            transition: all 0.2s ease;
+            font-weight: 600;
         }
 
         a:hover {
-            text-decoration: underline;
-        }
-
-        .nav-links {
-            margin-bottom: 20px;
+            color: var(--primary-hover);
+            text-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
         }
 
         .flash-message {
-            background-color: #fee2e2;
-            color: #991b1b;
-            padding: 10px 14px;
-            border-radius: 6px;
-            margin-bottom: 10px;
+            background: rgba(139, 92, 246, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #4c1d95;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-left: 4px solid var(--primary);
+            font-size: 14.5px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15);
+            animation: slideInDown 0.4s ease-out forwards;
+        }
+
+        @keyframes slideInDown {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         form {
-            margin-top: 15px;
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
         }
 
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: 600;
+            color: var(--text-main);
+            font-size: 14px;
         }
 
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             width: 100%;
-            max-width: 450px;
-            padding: 10px;
-            margin-top: 6px;
-            margin-bottom: 16px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
+            max-width: 500px;
+            padding: 12px 16px;
+            margin-top: 4px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            color: var(--text-main);
+            border-radius: 10px;
             box-sizing: border-box;
             display: block;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-size: 15px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
         }
 
         textarea {
-            min-height: 100px;
+            min-height: 120px;
             resize: vertical;
         }
 
-        button {
-            background-color: #2563eb;
+        button,
+        input[type="submit"] {
+            background: linear-gradient(135deg, var(--primary), #EC4899);
             color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 24px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            display: inline-block;
+            backdrop-filter: blur(5px);
         }
 
-        button:hover {
-            background-color: #1d4ed8;
+        button:hover,
+        input[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(236, 72, 153, 0.4);
+            background: linear-gradient(135deg, var(--primary-hover), #db2777);
+        }
+
+        button:active,
+        input[type="submit"]:active {
+            transform: translateY(1px);
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            background: white;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
         }
 
-        table, th, td {
-            border: 1px solid #d1d5db;
+        th,
+        td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            font-size: 14px;
         }
 
         th {
-            background-color: #e5e7eb;
-            text-align: left;
-            padding: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 12px;
+            white-space: nowrap;
         }
 
-        td {
-            padding: 10px;
-            vertical-align: top;
+        td a {
+            display: inline-block;
+            margin-right: 12px;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        td a:hover {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);
+            border-color: var(--primary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.5);
         }
 
         .section {
-            margin-top: 25px;
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
+        }
+
+        .password-wrapper {
+            position: relative;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .password-wrapper input {
+            padding-right: 48px;
+            margin-bottom: 20px;
+            max-width: 100%;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 4px;
+            color: var(--text-muted);
+            cursor: pointer;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+            width: auto;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
+            transform: translateY(-50%) scale(1.1);
+            background: transparent !important;
+            box-shadow: none !important;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="flash-message">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
 
-        {% block content %}{% endblock %}
+<body>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">C</div>
+                CareerSync
+            </div>
+            <nav class="sidebar-nav">
+                {% if session.get('role') == 'admin' %}
+                <a href="{{ url_for('admin_dashboard') }}" class="{{ 'active' if request.endpoint == 'admin_dashboard' else '' }}">Dashboard</a>
+                <a href="{{ url_for('admin_companies') }}" class="{{ 'active' if request.endpoint == 'admin_companies' else '' }}">Manage Companies</a>
+                <a href="{{ url_for('admin_drives') }}" class="{{ 'active' if request.endpoint == 'admin_drives' else '' }}">Placement Drives</a>
+                <a href="{{ url_for('admin_students') }}" class="{{ 'active' if request.endpoint == 'admin_students' else '' }}">Manage Students</a>
+                <a href="{{ url_for('admin_applications') }}" class="{{ 'active' if request.endpoint == 'admin_applications' else '' }}">View Applications</a>
+                <a href="{{ url_for('admin_placements') }}" class="{{ 'active' if request.endpoint == 'admin_placements' else '' }}">Placement History</a>
+                <a href="{{ url_for('admin_change_password') }}" class="{{ 'active' if request.endpoint == 'admin_change_password' else '' }}">Change Password</a>
+                {% elif session.get('role') == 'company' %}
+                <a href="{{ url_for('company_dashboard') }}" class="{{ 'active' if request.endpoint == 'company_dashboard' else '' }}">Dashboard</a>
+                <a href="{{ url_for('company_drives') }}" class="{{ 'active' if request.endpoint == 'company_drives' else '' }}">View My Drives</a>
+                <a href="{{ url_for('create_drive') }}" class="{{ 'active' if request.endpoint == 'create_drive' else '' }}">Create Drive</a>
+                <a href="{{ url_for('company_status') }}" class="{{ 'active' if request.endpoint == 'company_status' else '' }}">Application Status</a>
+                {% elif session.get('role') == 'student' %}
+                <a href="{{ url_for('student_dashboard') }}" class="{{ 'active' if request.endpoint == 'student_dashboard' else '' }}">Dashboard</a>
+                <a href="{{ url_for('student_drives') }}" class="{{ 'active' if request.endpoint == 'student_drives' else '' }}">Available Drives</a>
+                <a href="{{ url_for('student_applications') }}" class="{{ 'active' if request.endpoint == 'student_applications' else '' }}">My Applications</a>
+                <a href="{{ url_for('student_status') }}" class="{{ 'active' if request.endpoint == 'student_status' else '' }}">Current Status</a>
+                <a href="{{ url_for('student_history') }}" class="{{ 'active' if request.endpoint == 'student_history' else '' }}">Placement History</a>
+                {% else %}
+                <a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint == 'index' else '' }}">Home</a>
+                <a href="{{ url_for('login') }}" class="{{ 'active' if request.endpoint == 'login' else '' }}">Login</a>
+                <a href="{{ url_for('register_company') }}" class="{{ 'active' if request.endpoint == 'register_company' else '' }}">Company Registration</a>
+                <a href="{{ url_for('register_student') }}" class="{{ 'active' if request.endpoint == 'register_student' else '' }}">Student Registration</a>
+                {% endif %}
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="user-profile">
+                    {% if session.get('role') %}
+                    <span>{{ session.get('user_name', session.get('role') | title) }}</span>
+                    <div class="user-avatar">{{ session.get('user_name', session.get('role'))[0] | upper }}</div>
+                    <a href="{{ url_for('logout') }}" style="color: #ef4444; margin-left: 10px;">Logout</a>
+                    {% else %}
+                    <span>Guest User</span>
+                    <div class="user-avatar" style="background:#cbd5e1; color: #475569;">G</div>
+                    {% endif %}
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="container">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages %}
+                <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                {% block content %}{% endblock %}
+            </div>
+        </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButtons = document.querySelectorAll('.password-toggle');
+            
+            toggleButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // The input is always previousElementSibling to the button in our structure
+                    const input = this.previousElementSibling;
+                    
+                    if (input && input.tagName === 'INPUT') {
+                        if (input.type === 'password') {
+                            input.type = 'text';
+                            this.innerHTML = `
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>`;
+                        } else {
+                            input.type = 'password';
+                            this.innerHTML = `
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>`;
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </body>
+
 </html>

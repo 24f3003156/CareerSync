@@ -13,8 +13,8 @@
 <table>
     <tr>
         <th>ID</th>
-        <th>Student ID</th>
-        <th>Drive ID</th>
+        <th>Student Name</th>
+        <th>Drive Name</th>
         <th>Application Date</th>
         <th>Status</th>
         <th>Remarks</th>
@@ -23,9 +23,9 @@
     {% for application in applications %}
     <tr>
         <td>{{ application.id }}</td>
-        <td>{{ application.student_id }}</td>
-        <td>{{ application.drive_id }}</td>
-        <td>{{ application.application_date }}</td>
+        <td>{{ application.student.full_name }}</td>
+        <td>{{ application.drive.job_title }} ({{ application.drive.company.company_name }})</td>
+        <td>{{ application.application_date.strftime('%Y-%m-%d %H:%M') if application.application_date else '' }}</td>
         <td>{{ application.status }}</td>
         <td>{{ application.remarks }}</td>
     </tr>

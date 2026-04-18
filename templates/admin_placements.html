@@ -13,9 +13,9 @@
 <table>
     <tr>
         <th>ID</th>
-        <th>Student ID</th>
-        <th>Drive ID</th>
-        <th>Company ID</th>
+        <th>Student Name</th>
+        <th>Drive Name</th>
+        <th>Company Name</th>
         <th>Placed On</th>
         <th>Final Status</th>
         <th>Top 50 Packages</th>
@@ -24,10 +24,10 @@
     {% for placement in placements %}
     <tr>
         <td>{{ placement.id }}</td>
-        <td>{{ placement.student_id }}</td>
-        <td>{{ placement.drive_id }}</td>
-        <td>{{ placement.company_id }}</td>
-        <td>{{ placement.placed_on }}</td>
+        <td>{{ placement.student.full_name }}</td>
+        <td>{{ placement.drive.job_title }}</td>
+        <td>{{ placement.company.company_name }}</td>
+        <td>{{ placement.placed_on.strftime('%Y-%m-%d %H:%M') if placement.placed_on else '' }}</td>
         <td>{{ placement.final_status }}</td>
         <td>{{ placement.top_50_packages }}</td>
     </tr>

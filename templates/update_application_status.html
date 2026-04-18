@@ -3,28 +3,83 @@
 {% block title %}Update Application Status - CareerSync{% endblock %}
 
 {% block content %}
+<style>
+    .status-selector {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 12px;
+        margin-bottom: 24px;
+        margin-top: 8px;
+    }
+    .status-card {
+        cursor: pointer;
+        display: block;
+    }
+    .status-card input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .status-content {
+        background: rgba(255, 255, 255, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        border-radius: 12px;
+        padding: 16px 12px;
+        text-align: center;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        font-weight: 600;
+        color: var(--text-muted);
+    }
+    .status-card:hover .status-content {
+        background: rgba(255, 255, 255, 0.7);
+        transform: translateY(-2px);
+    }
+    .status-card input[type="radio"]:checked + .status-content {
+        background: rgba(255, 255, 255, 0.9);
+        border-color: var(--primary);
+        color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3), 0 4px 12px rgba(139, 92, 246, 0.1);
+    }
+</style>
+
 <h1>Update Application Status</h1>
 
-<p>Drive: {{ drive.job_title }} (ID: {{ drive.id }})</p>
-<p>Student ID: {{ application.student_id }}</p>
-<p>Current Status: {{ application.status }}</p>
+<div class="section">
+    <p><strong>Drive:</strong> {{ drive.job_title }} (ID: {{ drive.id }})</p>
+    <p><strong>Student ID:</strong> {{ application.student_id }}</p>
+    <p><strong>Current Status:</strong> {{ application.status }}</p>
 
-<div class="nav-links">
-    <a href="{{ url_for('company_drive_applications', drive_id = drive.id) }}">Back to Applications</a>
-    <a href="{{ url_for('logout') }}">Logout</a>
+    <form method="POST" style="margin-top: 30px;">
+        <label>Select New Status</label>
+        <div class="status-selector">
+            <label class="status-card">
+                <input type="radio" name="status" value="Shortlisted" required>
+                <div class="status-content">Shortlisted</div>
+            </label>
+            <label class="status-card">
+                <input type="radio" name="status" value="Selected">
+                <div class="status-content">Selected</div>
+            </label>
+            <label class="status-card">
+                <input type="radio" name="status" value="Rejected">
+                <div class="status-content">Rejected</div>
+            </label>
+            <label class="status-card">
+                <input type="radio" name="status" value="Interview">
+                <div class="status-content">Interview</div>
+            </label>
+            <label class="status-card">
+                <input type="radio" name="status" value="Placed">
+                <div class="status-content">Placed</div>
+            </label>
+        </div>
+
+        <button type="submit">Update Status</button>
+    </form>
 </div>
-
-<form method="POST">
-    <label>Select New Status</label>
-    <select name="status" required>
-        <option value="">Select Status</option>
-        <option value="Shortlisted">Shortlisted</option>
-        <option value="Selected">Selected</option>
-        <option value="Rejected">Rejected</option>
-        <option value="Interview">Interview</option>
-        <option value="Placed">Placed</option>
-    </select>
-
-    <button type="submit">Update Status</button>
-</form>
 {% endblock %}

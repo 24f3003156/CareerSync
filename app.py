@@ -43,6 +43,7 @@ def login():
             if admin and check_password_hash(admin.pass_hash, password):
                 session["user_id"] = admin.id
                 session["role"] = "admin"
+                session["user_name"] = "Administrator"
                 flash("Admin login successful.")
                 return redirect(url_for("admin_dashboard"))
             else:
@@ -62,6 +63,7 @@ def login():
                 
                 session["user_id"] = company.id
                 session["role"] = "company"
+                session["user_name"] = company.company_name
                 flash("Company login successful.")
                 return redirect(url_for("company_dashboard"))
             else:
@@ -75,6 +77,7 @@ def login():
                     return redirect(url_for("login"))
                 session["user_id"] = student.id
                 session["role"] = "student"
+                session["user_name"] = student.full_name
                 flash("Student login successful.")
                 return redirect(url_for("student_dashboard"))
             else:

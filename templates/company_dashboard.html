@@ -3,17 +3,68 @@
 {% block title %}Company Dashboard - CareerSync{% endblock %}
 
 {% block content %}
-<h1>Company Dashboard</h1>
+<style>
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 24px;
+        margin-top: 24px;
+    }
+    .stat-card {
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 30px 24px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.04);
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(139, 92, 246, 0.15);
+        border-color: rgba(139, 92, 246, 0.3);
+    }
+    .stat-value {
+        font-size: 1.8rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--primary), #EC4899);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 8px;
+        line-height: 1.2;
+    }
+    .stat-label {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+</style>
 
-<p>Company Name: {{ company.company_name }}</p>
-<p>Email: {{ company.email }}</p>
-<p>Domain: {{ company.domain }}</p>
-<p>Approval Status: {{ company.approval_status }}</p>
+<h1>Company Overview</h1>
+<p style="color: var(--text-muted); margin-bottom: 30px; font-size: 1.1rem;">Welcome back! Here is your company profile summary.</p>
 
-<div class="nav-links">
-    <a href="{{ url_for('company_drives') }}">View My Drives</a>
-    <a href="{{ url_for('create_drive') }}">Create Placement Drive</a>
-    <a href="{{ url_for('company_status') }}">View Current Status</a>
-    <a href="{{ url_for('logout') }}">Logout</a>
+<div class="dashboard-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ company.company_name }}</div>
+        <div class="stat-label">Company Name</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ company.domain }}</div>
+        <div class="stat-label">Domain</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value" style="font-size: 1.2rem;">{{ company.email }}</div>
+        <div class="stat-label">Email</div>
+    </div>
+    <div class="stat-card" style="border: 1px solid {% if company.approval_status == 'Approved' %}rgba(16, 185, 129, 0.5){% else %}rgba(245, 158, 11, 0.5){% endif %};">
+        <div class="stat-value" style="background: {% if company.approval_status == 'Approved' %}linear-gradient(135deg, #059669, #10b981){% else %}linear-gradient(135deg, #d97706, #f59e0b){% endif %}; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            {{ company.approval_status }}
+        </div>
+        <div class="stat-label">Approval Status</div>
+    </div>
 </div>
 {% endblock %}
