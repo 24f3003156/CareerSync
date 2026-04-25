@@ -2,11 +2,29 @@
 
 {% block title %}Login - CareerSync{% endblock %}
 
+{% block sidebar %}{% endblock %}
+{% block topbar %}{% endblock %}
+
 {% block content %}
 <style>
+    .container {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 40px 20px !important;
+        margin: 0 !important;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
     .auth-container {
+        width: 100%;
         max-width: 480px;
-        margin: 60px auto;
+        margin: auto;
         padding: 40px;
         background: rgba(255, 255, 255, 0.4);
         backdrop-filter: blur(16px);
@@ -38,8 +56,39 @@
         z-index: 1;
     }
 
+    .auth-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .auth-logo-icon {
+        width: 54px;
+        height: 54px;
+        background: linear-gradient(135deg, var(--primary), #EC4899);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 800;
+        font-size: 28px;
+        box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+        border: 2px solid rgba(255, 255, 255, 0.8);
+    }
+
+    .auth-logo-text {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--text-main);
+        letter-spacing: -0.02em;
+        margin: 0;
+    }
+
     .auth-header h1 {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
         margin-bottom: 8px;
         background: linear-gradient(135deg, var(--primary), #EC4899);
         -webkit-background-clip: text;
@@ -63,7 +112,6 @@
         padding: 0;
         margin: 0;
     }
-
     .auth-form input, .auth-form select {
         max-width: 100%;
         background: rgba(255, 255, 255, 0.6);
@@ -167,6 +215,10 @@
 
 <div class="auth-container">
     <div class="auth-header">
+        <div class="auth-logo">
+            <div class="auth-logo-icon">C</div>
+            <h2 class="auth-logo-text">CareerSync</h2>
+        </div>
         <h1>Welcome Back</h1>
         <p>Sign in to continue to CareerSync</p>
     </div>

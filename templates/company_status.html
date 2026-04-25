@@ -10,13 +10,217 @@
     <a href="{{ url_for('logout') }}">Logout</a>
 </div>
 
-<h2>Company Details</h2>
-<p>Company Name: {{ company.company_name }}</p>
-<p>Email: {{ company.email }}</p>
-<p>Approval Status: {{ company.approval_status }}</p>
-<p>Active Status: {{ company.is_active }}</p>
+<style>
+    .company-profile-card {
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-radius: 24px;
+        padding: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 10px 40px rgba(139, 92, 246, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        margin-bottom: 40px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
 
-<h2>Drive Status</h2>
+    .company-profile-card::before {
+        content: '';
+        position: absolute;
+        top: -50px;
+        right: -50px;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .company-profile-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 50px rgba(139, 92, 246, 0.15);
+    }
+
+    .profile-avatar {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), #EC4899);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        font-weight: 800;
+        box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+        border: 4px solid rgba(255, 255, 255, 0.8);
+        flex-shrink: 0;
+        text-transform: uppercase;
+    }
+
+    .profile-info {
+        flex: 1;
+    }
+
+    .profile-name {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--text-main);
+        margin: 0 0 6px 0;
+        background: linear-gradient(135deg, #4c1d95, #be185d);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.02em;
+    }
+
+    .profile-email {
+        font-size: 1.05rem;
+        color: var(--text-muted);
+        margin: 0 0 16px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 16px;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .status-active {
+        background: rgba(16, 185, 129, 0.15);
+        color: #059669;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+    }
+
+    .status-active .indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #10B981;
+        box-shadow: 0 0 8px #10B981;
+        animation: pulse 2s infinite;
+    }
+
+    .status-inactive {
+        background: rgba(239, 68, 68, 0.15);
+        color: #DC2626;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
+    }
+
+    .status-inactive .indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #EF4444;
+        box-shadow: 0 0 8px #EF4444;
+    }
+
+    .status-pending {
+        background: rgba(245, 158, 11, 0.15);
+        color: #d97706;
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
+    }
+
+    .status-pending .indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #F59E0B;
+        box-shadow: 0 0 8px #F59E0B;
+        animation: pulse-pending 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+        70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    @keyframes pulse-pending {
+        0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+        70% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+
+    .section-title {
+        font-size: 1.6rem;
+        font-weight: 800;
+        margin-bottom: 24px;
+        margin-top: 32px;
+        color: var(--text-main);
+        position: relative;
+        display: inline-block;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 40px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), #EC4899);
+        border-radius: 2px;
+    }
+</style>
+
+<h2 class="section-title">Company Details</h2>
+
+<div class="company-profile-card">
+    <div class="profile-avatar">
+        {{ company.company_name[0]|upper if company.company_name else 'C' }}
+    </div>
+    <div class="profile-info">
+        <h3 class="profile-name">{{ company.company_name }}</h3>
+        <p class="profile-email">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            {{ company.email }}
+        </p>
+        <div style="display: flex; gap: 12px; margin-top: 12px;">
+            {% if company.is_active %}
+            <div class="status-badge status-active">
+                <span class="indicator"></span> Active
+            </div>
+            {% else %}
+            <div class="status-badge status-inactive">
+                <span class="indicator"></span> Inactive
+            </div>
+            {% endif %}
+
+            {% if company.approval_status == 'Approved' %}
+            <div class="status-badge status-active">
+                <span class="indicator"></span> Approved
+            </div>
+            {% elif company.approval_status == 'Pending' %}
+            <div class="status-badge status-pending">
+                <span class="indicator"></span> Pending
+            </div>
+            {% else %}
+            <div class="status-badge status-inactive">
+                <span class="indicator"></span> {{ company.approval_status }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<h2 class="section-title">Drive Status</h2>
 <table>
     <tr>
         <th>Drive ID</th>

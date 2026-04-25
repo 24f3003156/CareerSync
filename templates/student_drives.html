@@ -19,7 +19,7 @@
 
 <table>
     <tr>
-        <th>Drive ID</th>
+        <th>Company Name</th>
         <th>Job Title</th>
         <th>Skills Required</th>
         <th>Location</th>
@@ -29,11 +29,11 @@
 
     {% for drive in drives %}
     <tr>
-        <td>{{ drive.id }}</td>
+        <td>{{ drive.company.company_name }}</td>
         <td>{{ drive.job_title }}</td>
         <td>{{ drive.skills_required }}</td>
         <td>{{ drive.location }}</td>
-        <td>{{ drive.application_deadline }}</td>
+        <td>{{ drive.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if drive.application_deadline else '' }}</td>
         <td>
             {% if drive.id in applied_drive_ids %}
                 Already Applied
