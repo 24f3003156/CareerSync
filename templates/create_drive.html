@@ -36,26 +36,25 @@
         height: 0;
     }
     .cgpa-content {
-        background: rgba(255, 255, 255, 0.85);
-        border: 1px solid rgba(139, 92, 246, 0.25);
+        background: #f8fafc;
+        border: 1px solid var(--border-color);
         border-radius: 8px;
         padding: 10px 4px;
         text-align: center;
         transition: all 0.2s ease;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02), inset 0 1px 2px rgba(0, 0, 0, 0.01);
         font-weight: 600;
         font-size: 0.95rem;
         color: var(--text-muted);
     }
     .cgpa-card:hover .cgpa-content {
-        background: rgba(255, 255, 255, 0.7);
+        background: #f1f5f9;
+        border-color: #cbd5e1;
         transform: translateY(-1px);
     }
     .cgpa-card input[type="radio"]:checked + .cgpa-content {
-        background: rgba(255, 255, 255, 0.9);
+        background: var(--primary-light);
         border-color: var(--primary);
         color: var(--primary);
-        box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3), 0 4px 10px rgba(139, 92, 246, 0.1);
     }
 </style>
 
