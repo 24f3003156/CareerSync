@@ -827,7 +827,7 @@ def student_history():
     return render_template("student_history.html", placements = placements)
 
 if __name__ == "__main__":
-    app.run(debug= True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
 
 
 
