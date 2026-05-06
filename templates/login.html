@@ -26,10 +26,12 @@
         max-width: 480px;
         margin: auto;
         padding: 48px 40px;
-        background: var(--bg-card);
+        background: var(--bg-glass);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         border-radius: var(--radius-lg);
-        border: 1px solid var(--border-color);
-        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border-glass);
+        box-shadow: var(--shadow-glass);
         position: relative;
         overflow: hidden;
     }
@@ -57,22 +59,22 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
-        font-weight: 800;
+        color: #ffffff;
+        font-weight: 700;
         font-size: 24px;
-        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
     }
 
     .auth-logo-text {
         font-size: 1.8rem;
-        font-weight: 800;
+        font-weight: 700;
         color: var(--text-main);
-        letter-spacing: -0.02em;
+        letter-spacing: -0.01em;
         margin: 0;
     }
 
     .auth-header h1 {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         margin-bottom: 8px;
         color: var(--text-main);
         font-weight: 700;
@@ -80,8 +82,8 @@
     }
 
     .auth-header p {
-        color: var(--text-muted);
-        font-weight: 500;
+        color: var(--text-main);
+        font-weight: 600;
         margin: 0;
     }
 
@@ -97,13 +99,14 @@
 
     .auth-form input, .auth-form select {
         max-width: 100%;
+        background: rgba(255, 255, 255, 0.9);
     }
 
     .auth-form button[type="submit"] {
         width: 100%;
         margin-top: 16px;
         padding: 12px;
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
 
     .auth-footer {
@@ -116,18 +119,21 @@
 
     .auth-footer p {
         margin: 8px 0;
-        color: var(--text-muted);
+        color: var(--text-main);
+        font-weight: 600;
     }
 
     .auth-footer a {
-        font-weight: 600;
-        color: var(--primary);
+        font-weight: 800;
+        color: var(--secondary);
         text-decoration: none;
         transition: color 0.2s ease;
     }
     
     .auth-footer a:hover {
-        color: var(--primary-hover);
+        color: var(--danger);
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
     }
 
     .role-selector {
@@ -151,8 +157,8 @@
     }
 
     .role-content {
-        background: #f8fafc;
-        border: 1px solid var(--border-color);
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid var(--border-solid);
         border-radius: 12px;
         padding: 16px 8px;
         text-align: center;
@@ -161,6 +167,7 @@
         flex-direction: column;
         align-items: center;
         gap: 8px;
+        box-shadow: var(--shadow-sm);
     }
 
     .role-icon {
@@ -169,22 +176,24 @@
 
     .role-title {
         font-size: 0.875rem;
-        font-weight: 600;
-        color: var(--text-muted);
+        font-weight: 700;
+        color: var(--text-main);
     }
 
     .role-card:hover .role-content {
-        background: #f1f5f9;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         border-color: #cbd5e1;
     }
 
     .role-card input[type="radio"]:checked + .role-content {
-        background: var(--primary-light);
+        background: var(--primary);
         border-color: var(--primary);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
     }
 
     .role-card input[type="radio"]:checked + .role-content .role-title {
-        color: var(--primary);
+        color: #ffffff;
     }
 </style>
 

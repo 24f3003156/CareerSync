@@ -11,44 +11,45 @@
         margin-top: 24px;
     }
     .stat-card {
-        background: var(--bg-card);
+        background: var(--bg-glass);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         border-radius: var(--radius-lg);
         padding: 30px 24px;
-        border: 1px solid var(--border-color);
-        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-glass);
+        box-shadow: var(--shadow-glass);
         text-align: center;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .stat-card:hover {
         transform: translateY(-2px);
-        box-shadow: var(--shadow-md);
-        border-color: #cbd5e1;
+        box-shadow: 0 10px 40px -10px rgba(31,38,135,0.15);
     }
     .stat-value {
         font-size: 1.8rem;
-        font-weight: 700;
-        color: var(--text-main);
+        font-weight: 800;
+        color: var(--primary);
         margin-bottom: 8px;
         line-height: 1.2;
         letter-spacing: -0.025em;
     }
     .stat-label {
-        font-size: 0.875rem;
+        font-size: 0.9rem;
         font-weight: 600;
         color: var(--text-muted);
         text-transform: uppercase;
         letter-spacing: 0.05em;
     }
     .status-approved {
-        border-color: #34d399 !important;
-        background: #f0fdf4 !important;
+        background: rgba(16, 185, 129, 0.1) !important;
+        border-color: rgba(16, 185, 129, 0.2) !important;
     }
     .status-approved .stat-value {
         color: #059669 !important;
     }
     .status-pending {
-        border-color: #fbbf24 !important;
-        background: #fffbeb !important;
+        background: rgba(245, 158, 11, 0.1) !important;
+        border-color: rgba(245, 158, 11, 0.2) !important;
     }
     .status-pending .stat-value {
         color: #d97706 !important;
