@@ -10,8 +10,23 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
         :root {
+            /* Default/Admin: Blue Scheme */
             --primary: #2563eb;
             --primary-hover: #1d4ed8;
+            --grad-start: #3b82f6;
+            --grad-end: #2563eb;
+            --orb-1: rgba(59, 130, 246, 0.4);
+            --orb-2: rgba(14, 165, 233, 0.3);
+            --orb-3: rgba(99, 102, 241, 0.25);
+            --shadow-primary-05: rgba(37, 99, 235, 0.05);
+            --shadow-primary-10: rgba(37, 99, 235, 0.1);
+            --shadow-primary-15: rgba(37, 99, 235, 0.15);
+            --shadow-primary-20: rgba(37, 99, 235, 0.2);
+            --shadow-primary-25: rgba(37, 99, 235, 0.25);
+            --shadow-primary-30: rgba(37, 99, 235, 0.3);
+            --shadow-primary-40: rgba(37, 99, 235, 0.4);
+            --shadow-primary-50: rgba(37, 99, 235, 0.5);
+
             --accent-yellow: #f59e0b;
             --danger: #ef4444;
             --text-main: #1e293b;
@@ -25,6 +40,65 @@
             --radius-md: 16px;
             --radius-lg: 24px;
         }
+
+        {% if session.get('role') == 'student' %}
+        :root {
+            /* Student: Yellow/Amber Scheme */
+            --primary: #d97706;
+            --primary-hover: #b45309;
+            --grad-start: #f59e0b;
+            --grad-end: #d97706;
+            --orb-1: rgba(245, 158, 11, 0.4);
+            --orb-2: rgba(252, 211, 77, 0.3);
+            --orb-3: rgba(217, 119, 6, 0.25);
+            --shadow-primary-05: rgba(217, 119, 6, 0.05);
+            --shadow-primary-10: rgba(217, 119, 6, 0.1);
+            --shadow-primary-15: rgba(217, 119, 6, 0.15);
+            --shadow-primary-20: rgba(217, 119, 6, 0.2);
+            --shadow-primary-25: rgba(217, 119, 6, 0.25);
+            --shadow-primary-30: rgba(217, 119, 6, 0.3);
+            --shadow-primary-40: rgba(217, 119, 6, 0.4);
+            --shadow-primary-50: rgba(217, 119, 6, 0.5);
+        }
+        {% elif session.get('role') == 'company' %}
+        :root {
+            /* Company: Red Scheme */
+            --primary: #dc2626;
+            --primary-hover: #b91c1c;
+            --grad-start: #ef4444;
+            --grad-end: #dc2626;
+            --orb-1: rgba(239, 68, 68, 0.4);
+            --orb-2: rgba(248, 113, 113, 0.3);
+            --orb-3: rgba(185, 28, 28, 0.25);
+            --shadow-primary-05: rgba(220, 38, 38, 0.05);
+            --shadow-primary-10: rgba(220, 38, 38, 0.1);
+            --shadow-primary-15: rgba(220, 38, 38, 0.15);
+            --shadow-primary-20: rgba(220, 38, 38, 0.2);
+            --shadow-primary-25: rgba(220, 38, 38, 0.25);
+            --shadow-primary-30: rgba(220, 38, 38, 0.3);
+            --shadow-primary-40: rgba(220, 38, 38, 0.4);
+            --shadow-primary-50: rgba(220, 38, 38, 0.5);
+        }
+        {% elif session.get('role') == 'admin' %}
+        :root {
+            /* Admin: Green Scheme */
+            --primary: #059669;
+            --primary-hover: #047857;
+            --grad-start: #10b981;
+            --grad-end: #059669;
+            --orb-1: rgba(16, 185, 129, 0.4);
+            --orb-2: rgba(52, 211, 153, 0.3);
+            --orb-3: rgba(4, 120, 87, 0.25);
+            --shadow-primary-05: rgba(16, 185, 129, 0.05);
+            --shadow-primary-10: rgba(16, 185, 129, 0.1);
+            --shadow-primary-15: rgba(16, 185, 129, 0.15);
+            --shadow-primary-20: rgba(16, 185, 129, 0.2);
+            --shadow-primary-25: rgba(16, 185, 129, 0.25);
+            --shadow-primary-30: rgba(16, 185, 129, 0.3);
+            --shadow-primary-40: rgba(16, 185, 129, 0.4);
+            --shadow-primary-50: rgba(16, 185, 129, 0.5);
+        }
+        {% endif %}
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -51,11 +125,11 @@
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(37, 99, 235, 0.3);
+            background: var(--shadow-primary-30);
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(37, 99, 235, 0.6);
+            background: var(--shadow-primary-50);
         }
 
         body::before, body::after {
@@ -70,13 +144,13 @@
         }
 
         body::before {
-            background: rgba(59, 130, 246, 0.4); /* Vibrant Blue */
+            background: var(--orb-1);
             top: -200px;
             left: -200px;
         }
 
         body::after {
-            background: rgba(14, 165, 233, 0.3); /* Sky Blue */
+            background: var(--orb-2);
             bottom: -200px;
             right: -200px;
             animation-delay: -10s;
@@ -92,7 +166,7 @@
             width: 600px;
             height: 600px;
             border-radius: 50%;
-            background: rgba(99, 102, 241, 0.25); /* Indigo */
+            background: var(--orb-3);
             filter: blur(120px);
             z-index: -1;
             top: 50%;
@@ -142,7 +216,7 @@
         .sidebar-header .logo-icon {
             width: 32px;
             height: 32px;
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -150,7 +224,7 @@
             color: #ffffff;
             font-weight: 800;
             font-size: 18px;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 4px 15px var(--shadow-primary-40);
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
@@ -179,7 +253,7 @@
         }
 
         .sidebar-nav a.active {
-            background: linear-gradient(90deg, rgba(37, 99, 235, 0.15) 0%, rgba(37, 99, 235, 0.05) 100%);
+            background: linear-gradient(90deg, var(--shadow-primary-15) 0%, var(--shadow-primary-05) 100%);
             color: var(--primary);
             font-weight: 700;
             border-left: 4px solid var(--primary);
@@ -237,7 +311,7 @@
             justify-content: center;
             font-weight: 600;
             font-size: 14px;
-            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+            box-shadow: 0 2px 4px var(--shadow-primary-20);
         }
 
         .container {
@@ -351,7 +425,7 @@
             outline: none;
             background: rgba(255, 255, 255, 0.8);
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2), inset 0 2px 4px rgba(0,0,0,0.02);
+            box-shadow: 0 0 0 3px var(--shadow-primary-20), inset 0 2px 4px rgba(0,0,0,0.02);
         }
 
         textarea {
@@ -360,7 +434,7 @@
         }
 
         button, input[type="submit"], .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
             color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 12px 24px;
@@ -369,7 +443,7 @@
             font-size: 15px;
             font-weight: 700;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 4px 15px var(--shadow-primary-40);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -378,9 +452,9 @@
         }
 
         button:hover, input[type="submit"]:hover, .btn-primary:hover {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            background: linear-gradient(135deg, var(--grad-end), var(--primary-hover));
             transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+            box-shadow: 0 8px 25px var(--shadow-primary-50);
         }
 
         button:active, input[type="submit"]:active {
@@ -438,7 +512,7 @@
         }
 
         th {
-            background: rgba(37, 99, 235, 0.05);
+            background: var(--shadow-primary-05);
             font-weight: 700;
             color: var(--text-muted);
             text-transform: uppercase;
@@ -462,13 +536,13 @@
             color: var(--primary);
             padding: 6px 12px;
             border-radius: 6px;
-            background: rgba(37, 99, 235, 0.1);
+            background: var(--shadow-primary-10);
             transition: all 0.2s ease;
             text-decoration: none;
         }
 
         td a:hover {
-            background: rgba(37, 99, 235, 0.2);
+            background: var(--shadow-primary-20);
             color: var(--primary-hover);
         }
 
@@ -481,7 +555,7 @@
         }
 
         tr:hover td {
-            background: rgba(37, 99, 235, 0.05);
+            background: var(--shadow-primary-05);
         }
 
         .section {
