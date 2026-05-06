@@ -27,12 +27,14 @@
         max-width: 640px;
         width: 100%;
         background: var(--bg-glass);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
         border-radius: 24px;
         padding: 60px 40px;
         text-align: center;
         border: 1px solid var(--border-glass);
+        border-top: 1px solid rgba(255, 255, 255, 0.9);
+        border-left: 1px solid rgba(255, 255, 255, 0.9);
         box-shadow: var(--shadow-glass);
         position: relative;
         overflow: hidden;
@@ -54,24 +56,24 @@
     .landing-logo-icon {
         width: 64px;
         height: 64px;
-        background: var(--primary);
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
         border-radius: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
         color: #ffffff;
-        font-weight: 700;
+        font-weight: 800;
         font-size: 32px;
-        box-shadow: 0 8px 16px rgba(37, 99, 235, 0.25);
+        box-shadow: 0 8px 16px rgba(37, 99, 235, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     .landing-logo-text {
         font-size: 2.5rem;
         font-weight: 800;
         color: var(--text-main);
-        letter-spacing: -0.03em;
+        letter-spacing: -0.02em;
         margin: 0;
-        text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
     }
 
     .landing-title {
@@ -79,7 +81,7 @@
         font-weight: 800;
         margin-bottom: 16px;
         color: var(--text-main);
-        letter-spacing: -0.02em;
+        letter-spacing: -0.01em;
     }
 
     .landing-subtitle {
@@ -96,48 +98,6 @@
         gap: 16px;
         max-width: 320px;
         margin: 0 auto;
-    }
-
-    .btn-primary {
-        background: var(--primary);
-        color: #ffffff;
-        padding: 14px 24px;
-        border-radius: 12px;
-        font-weight: 600;
-        font-size: 1.05rem;
-        text-decoration: none;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-        transition: all 0.2s ease;
-        display: inline-flex;
-        justify-content: center;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
-        background: var(--primary-hover);
-        color: #ffffff;
-    }
-
-    .btn-secondary {
-        background: white;
-        color: var(--text-main);
-        padding: 14px 24px;
-        border-radius: 12px;
-        font-weight: 600;
-        font-size: 1rem;
-        text-decoration: none;
-        transition: all 0.2s ease;
-        border: 1px solid var(--border-solid);
-        box-shadow: var(--shadow-sm);
-        display: inline-flex;
-        justify-content: center;
-    }
-
-    .btn-secondary:hover {
-        background: #f8fafc;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 </style>
 

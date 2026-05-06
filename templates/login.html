@@ -27,10 +27,12 @@
         margin: auto;
         padding: 48px 40px;
         background: var(--bg-glass);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
         border-radius: var(--radius-lg);
         border: 1px solid var(--border-glass);
+        border-top: 1px solid rgba(255, 255, 255, 0.9);
+        border-left: 1px solid rgba(255, 255, 255, 0.9);
         box-shadow: var(--shadow-glass);
         position: relative;
         overflow: hidden;
@@ -54,15 +56,16 @@
     .auth-logo-icon {
         width: 48px;
         height: 48px;
-        background: var(--primary);
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
         border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
         color: #ffffff;
-        font-weight: 700;
+        font-weight: 800;
         font-size: 24px;
-        box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     .auth-logo-text {
